@@ -14,7 +14,7 @@ v1.0.0 Beta
 * [marquistj13/TongjiThesis 2020/07/18](https://github.com/marquistj13/TongjiThesis)
 
 ## 版本说明
-* 本版本为XAUATthesis v1.0，可能存在`疏漏与错误`，有兴趣使用的同学发现问题请告知于我；或提出建议，笔者将不胜感激；
+* 本版本为XAUATthesis v1.0.0 beta，可能存在`疏漏与错误`，有兴趣使用的同学发现问题请告知于我；或提出建议，笔者将不胜感激；
 * 本模板原则上按照[西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)中`《学位论文撰写标准》`一章进行编写，但是该章`缺乏维护`，许多详尽要求未给出，甚至存在过时要求，式样落后等；笔者在局部位置作了调整；
 * 未引入cleveref宏包，目前`CTeX`与`hyperref`、`cleveref `似乎还有不兼容之处，见[ctex, hyperref, cleveref 宏包冲突](https://gitmemory.com/issue/CTeX-org/ctex-kit/524/648526619)；
 * XAUATthesis在win 10系统，TeXlive 2020、MikTeX 20.6.29发行版可正常编译，在此感谢飘大王。
