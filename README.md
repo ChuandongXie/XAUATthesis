@@ -16,7 +16,7 @@ v1.0.0 Beta
 ## 版本说明
 * 本版本为XAUATthesis v1.0.0 beta，可能存在`疏漏与错误`，有兴趣使用的同学发现问题请告知于我；或提出建议，笔者将不胜感激；
 * 本模板原则上按照[西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)中`《学位论文撰写标准》`一章进行编写，但是该章`缺乏维护`，许多详尽要求未给出，甚至存在过时要求，式样落后等；笔者在局部位置作了调整；
-* 未引入cleveref宏包，目前`CTeX`与`hyperref`、`cleveref `似乎还有不兼容之处，见[ctex, hyperref, cleveref 宏包冲突](https://gitmemory.com/issue/CTeX-org/ctex-kit/524/648526619)；
+* 未引入cleveref宏包，目前`CTeX`与`hyperref`、`cleveref `似乎还有不兼容之处，见[ctex, hyperref, cleveref 宏包冲突](https://gitmemory.com/issue/CTeX-org/ctex-kit/524/648526619) - （已解决）；
 * XAUATthesis在win 10系统，TeXlive 2020、MikTeX 20.6.29发行版可正常编译，在此感谢飘大王。
 
 ## 使用说明
@@ -30,8 +30,14 @@ v1.0.0 Beta
   | secret     | none/one/two/three | 必选，公开/保密1年/保密2年/保密3年                |
   | bibtype    | numeric/authoryear | 可选，默认为数字型引用                            |
   | electronic |                    | 可选，电子版（打印时删除）                        |
-  | pifootnote |                    | 脚注标记中使用 \pkg{pifont} 的带圈数字，默认已打开 |
 * 关于选项中的保密选项，声明页的文本会`自动调整`。
 
 ## 更新说明
-* 未来更新将作说明。
+* 2021-05-26 修复threeparttable字号问题;
+* 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script"
+* 2021-07-20 引入cleveref包
+* 2021-11-16 删除pifootnote
+* 2021-11-16 subsubsection缩进2\ccwd
+* 2021-11-17 float，锁定浮动体位置
+* 2021-11-25 caption 居中
+* 2021-11-25 cleveref 公式
