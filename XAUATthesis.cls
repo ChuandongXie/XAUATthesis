@@ -229,7 +229,7 @@
     ignoreall,
     showcrop,
     % showframe, % 展示边框，暂不查看 2021-05-26
-}	
+}   
 
 \newcommand{\XAUAT@define@fontsize}[2]{%
     \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
@@ -441,7 +441,7 @@
 \BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
 % \BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-09
 % \BeforeBeginEnvironment{longtable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
-\BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
+% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
 
 
 \newcounter{XAUAT@bookmark}
