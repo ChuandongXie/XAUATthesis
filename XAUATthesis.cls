@@ -189,7 +189,7 @@
     bookmarksopen=true,
     bookmarksopenlevel=1,
     breaklinks=true,
-    colorlinks=true, % 2021-05-26 true,方便查看
+    colorlinks=false, % 2021-05-26 true,方便查看 % 正式文件需要改成false
     plainpages=false,
     pdfborder=0 0 0,
 }
@@ -556,7 +556,7 @@
   \kaishu\sanhao}
 
 %华文行楷
-\setCJKfamilyfont{stxingka}{STXINGKA.TTF}
+\setCJKfamilyfont{stxingka}{STXingkai}
 \newcommand{\stxingkai}{\CJKfamily{stxingka}}
 
 
@@ -622,8 +622,8 @@
         \sihao[1.3]{\XAUAT@eapply\\\XAUAT@edegree }
         \vskip 168pt
 
-        \sihao[1.3]
-        \begin{tabular}{lp{6cm}} 
+        \erhao[1.3]
+        \begin{tabular}{lp{2cm}} 
                 Candidate :         & \XAUAT@eauthor       \\
                 Student Number :    & \XAUAT@studentnumber \\
                 School/Department : & \XAUAT@edepartment   \\
@@ -688,7 +688,7 @@
     \fancyhead[CO]{\songti\xiaosi[1.0]\cabstractname}
     \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
     \vspace*{20.8pt}
-    \setCJKfamilyfont{fzxbsjw}{FZXBSJW.TTF}
+    \setCJKfamilyfont{fzxbsjw}{FZXBSJW--GB1-0}
     {\noindent\centering
     \parbox[c]{0.75\linewidth}{\CJKfamily{fzxbsjw}\sanhao[1.3]\centering\XAUAT@ctitlefirst \XAUAT@ctitlesecond\ifthenelse{\equal{\XAUAT@cfunds}{}}{}{$^{\ast}$}}\par % 
     \vspace{20.8pt}
