@@ -95,84 +95,9 @@
 % package loading
 % ------------------------------------------------------------------------------
 \LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=none]{ctexbook}
-\ctexset{fontset=windows} % 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script" // 需要先定义fontset为none
+\ctexset{fontset=windows} % 2021-05-26 solve warning "Font FandolSong-Regular does not contain requested(fontspec) Script" // fontset=none
 
-% \AmSTeX\ 宏包
-\RequirePackage{amsmath,amssymb}
-
-% 设置 Times New Roman，Helvetic
-% 这是txfonts的替代品，即txfonts.sty分成了独立的package：newtxtext 和 newtxmath
-\RequirePackage[defaultsups]{newtxtext}
-\RequirePackage{newtxmath}
-
-% 使用 Courier 字体
-\RequirePackage{courier}
-
-% 图形支持宏包
-\RequirePackage{graphicx}
-
-% 并排图形
-\RequirePackage[labelformat=simple]{subcaption}
-% \captionsetup{skip=\dimexpr\abovecaptionskip-3pt}
-% TODO: caption 与 subcaption 的距离
-
-\RequirePackage{caption}
-
-% \RequirePackage{subfig}
-% \captionsetup1
-
-% \pkg{pdfpages} 宏包便于插入扫描后的声明页 PDF 文档。
-\RequirePackage{pdfpages}
-\includepdfset{fitpaper=true}
-
-% 列表环境
-\RequirePackage[shortlabels]{enumitem}
-\setlist{nosep}
-\setlist[itemize]{align=parleft,left=0pt..1em} % 2021-07-12
-
-%  environ使得我们在创建新的环境的时候可以定义new author interface
-\RequirePackage{environ}
-
-% 空白页
-\RequirePackage{emptypage} 
-
-% 利用 \pkg{CJKfntef} 实现汉字的下划线和盒子内两段对齐，并可以避免
-% \cs{makebox}\oarg{width}\oarg{s} 可能产生的 underful boxes。
-\RequirePackage{CJKfntef}
-
-% 定理类环境宏包，其中 \pkg{amsmath} 选项用来兼容 \AmSTeX\ 的宏包
-\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
-
-% 表格控制
-\RequirePackage{array}
-
-
-% 使用三线表：\cs{toprule}，\cs{midrule}，\cs{bottomrule}。%TODO:
-\RequirePackage{booktabs}
-\setlength\aboverulesep{0ex} % 2021-07-11 discontinued vertical line
-\setlength\belowrulesep{0ex}
-
-% 长表格
-\RequirePackage{longtable}
-% \setlength\LTleft{0pt plus \textwidth} % 长表格位置/间距
-% \setlength\LTright{0pt plus \textwidth}
-
-
-
-% Latex 3 new command
-\RequirePackage{xparse}
-
-% 页眉页脚
-\RequirePackage{fancyhdr}
-
-% 调整行距
-\RequirePackage{setspace}
-
-% subfigure
-% \RequirePackage[tight]{subfigure}
-
-
-% 参考文献，使用biblatex包
+% biblatex
 \ifXAUAT@numeric
     \RequirePackage[backend=biber,style=gb7714-2015,gbpub=false,isbn=false,doi=false,gbtitlelink=true,url=false,sortlocale=zh__pinyin]{biblatex} 
 \else
@@ -180,6 +105,106 @@
         \RequirePackage[backend=biber,style=gb7714-2015ay,gbpub=false,isbn=false,doi=false,gbtitlelink=true,url=false,sortlocale=zh__pinyin]{biblatex} 
     \fi
 \fi
+
+% % AmSTeX
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+% allow equation break
+% \allowdisplaybreaks[4]
+% \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
+
+% environ
+\RequirePackage{environ}
+
+% graphicx
+\RequirePackage{graphicx}
+
+% caption
+\RequirePackage{caption}
+
+% subcaption
+\RequirePackage{subcaption} % 2022-01-02 09:20:41
+
+% insert pdf pages
+\RequirePackage{pdfpages}
+\includepdfset{fitpaper=true}
+
+% enumitem
+\RequirePackage[shortlabels]{enumitem}
+\setlist{nosep}
+\setlist[itemize]{align=parleft,left=0pt..1em} % 2021-07-12
+
+% emptypage
+\RequirePackage{emptypage} 
+
+% CJKfntef
+\RequirePackage{CJKfntef}
+
+% booktabs
+\RequirePackage{booktabs}
+\setlength\aboverulesep{0ex} % 2021-07-11 discontinued vertical line
+\setlength\belowrulesep{0ex}
+
+% array
+\RequirePackage{array}
+
+% longtable
+\RequirePackage{longtable}
+
+% threeparttable
+\RequirePackage{threeparttable}
+
+% multirow
+\RequirePackage{multirow}
+
+% slashbox in table
+% \RequirePackage{slashbox}
+
+% tabincell command
+\newcommand{\tabincell}[2]{
+  \begin{tabular}{@{}#1@{}}#2\end{tabular}
+}
+
+% tikz
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+% use tikz-imagelabels
+\RequirePackage{tikz-imagelabels}
+\imagelabelset{
+  coarse grid color = red,
+  fine grid color = gray,
+  image label font = \sffamily\bfseries\small,
+  image label distance = 2mm,
+  image label back = black,
+  image label text = white,
+  coordinate label font = \sffamily\bfseries\scriptsize,
+  coordinate label distance = 2mm,
+  coordinate label back = black,
+  coordinate label text = white,
+  annotation font = \normalfont\xiaowu,
+  arrow distance = 1.5mm,
+  border thickness = 0.6pt,
+  arrow thickness = 0.4pt,
+  tip size = 1.2mm,
+  outer dist = 0.5cm,
+}
+
+% Latex 3 new command
+\RequirePackage{xparse}
+
+% setspace
+\RequirePackage{setspace}
+
+% lscape 2021-07-31 landscape 
+\RequirePackage{pdflscape}
+
+% rotating 2021-08-01
+\RequirePackage{rotating}
 
 % hyperref
 \RequirePackage{hyperref}
@@ -200,18 +225,50 @@
 \crefname{equation}{式}{式} % 2021-11-25 11:03:49
 \newcommand{\crefrangeconjunction}{-}
 
-% 定制表格字号
-\RequirePackage{etoolbox}
-
-\RequirePackage{threeparttable}
-
-% \RequirePackage{tabularx}
-
-% 设置 url 样式，与上下文一致
+% url style, same as the context
 \urlstyle{same}
 
-% % typearea
-% \RequirePackage{typearea}
+% 确定浮动对象的位置
+\RequirePackage{float} % 2021-11-17 16:25:47
+
+% 浮动体距离
+\setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
+\setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
+% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}s
+\setlength{\@fptop}{0pt \@plus 1fil}
+\setlength{\@fpsep}{12pt \@plus 2fil}
+\setlength{\@fpbot}{0pt \@plus 1fil}
+\renewcommand{\topfraction}{0.7}
+\renewcommand{\bottomfraction}{0.3}
+\renewcommand{\textfraction}{0.2}
+\renewcommand{\floatpagefraction}{0.5}
+
+% 浮动图形和表格标题样式
+\DeclareCaptionLabelFormat{XAUAT}{\wuhao[1.5]\normalfont #1~#2}
+\DeclareCaptionLabelSeparator{XAUAT}{\hspace{1em}}
+\DeclareCaptionFont{XAUAT}{\wuhao[1.5]}
+\captionsetup{labelformat=XAUAT,labelsep=XAUAT,font=XAUAT}
+\captionsetup{justification=centering} % 2021-11-25 10:43:45
+
+% bicaption
+\RequirePackage[list=off]{bicaption}
+\captionsetup{bi-lang=both}
+\DeclareCaptionOption{bi-first}[format=hang,hangindent=-0.5em]{}
+\DeclareCaptionOption{bi-second}[format=hang,hangindent=-2em]{
+    \def\tablename{Table}
+    \def\figurename{Fig.}
+}
+
+\captionsetup[bi-first]{bi-first}
+\captionsetup[bi-second]{bi-second}
+\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
+\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
+
+
+% 表格字号、行距
+\BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
+\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
+% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
 
 % 页面设置
 \RequirePackage{geometry}
@@ -228,8 +285,8 @@
     nomarginpar,
     ignoreall,
     showcrop,
-    % showframe, % 展示边框，暂不查看 2021-05-26
-}   
+    % showframe, % 2021-05-26
+}	
 
 \newcommand{\XAUAT@define@fontsize}[2]{%
     \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
@@ -254,7 +311,8 @@
 \XAUAT@define@fontsize{qihao}{5.5bp}
 \XAUAT@define@fontsize{bahao}{5bp}
 
-% 页眉页脚
+% fancyhdr
+\RequirePackage{fancyhdr}
 \fancypagestyle{XAUAT@empty}{%
     \fancyhf{}
     \renewcommand{\headrulewidth}{0pt}
@@ -266,15 +324,9 @@
     \fancyhead[CO]{\songti\xiaosi[1.0]\leftmark}
     \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
     \fancyfoot[RO,LE]{\songti\wuhao[1.0]\thepage}    
-    \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % 页眉线，参https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
+    \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % headrule, reference: https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
     \renewcommand{\footrulewidth}{0pt}
 }
-
-% \fancypagestyle{mylandscape}{ % 2021-08-01
-%     \fancyhf{} %Clears the header/footer
-%     \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % 页眉线，参https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
-%     \renewcommand{\footrulewidth}{0pt}
-% }
 
 \renewcommand\frontmatter{%
     \cleardoublepage
@@ -296,7 +348,7 @@
     \@mainmattertrue
 }
 
-% 脚注
+% footmisc
 \RequirePackage[perpage,hang,bottom]{footmisc} % 2021-11-16 21-37-44
 \renewcommand{\footnoterule}{\vskip-3\p@\hrule\@width0.3\textwidth\@height0.4\p@\vskip2.6\p@}
 \let\XAUAT@footnotesize\footnotesize
@@ -316,69 +368,6 @@
 \belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
 \setlength\jot{27pt}
 
-% 允许太长的公式断行、分页等。
-\allowdisplaybreaks[4]
-\renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
-
-% 确定浮动对象的位置
-\RequirePackage{float} % 2021-11-17 16:25:47
-
-% 浮动体距离
-\setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
-\setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
-% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}s
-\setlength{\@fptop}{0pt \@plus 1fil}
-\setlength{\@fpsep}{12pt \@plus 2fil}
-\setlength{\@fpbot}{0pt \@plus 1fil}
-\renewcommand{\topfraction}{0.7}
-\renewcommand{\bottomfraction}{0.3}
-\renewcommand{\textfraction}{0.2}
-\renewcommand{\floatpagefraction}{0.5}
-
-% 浮动图形和表格标题样式
-\DeclareCaptionLabelFormat{XAUAT}{\wuhao[1.5]\normalfont #1~#2}
-\DeclareCaptionLabelSeparator{XAUAT}{\hspace{1em}}
-\DeclareCaptionFont{XAUAT}{\wuhao[1.5]}
-\captionsetup{labelformat=XAUAT,labelsep=XAUAT,font=XAUAT}
-% \captionsetup[sub]{font=XAUAT,skip=6bp}
-\captionsetup{justification=centering} % 2021-11-25 10:43:45
-
-% bicaption
-\RequirePackage[list=off]{bicaption}
-\captionsetup{bi-lang=both}
-\DeclareCaptionOption{bi-first}[format=hang,hangindent=-0.5em]{}
-\DeclareCaptionOption{bi-second}[format=hang,hangindent=-2em]{
-    \def\tablename{Table}
-    \def\figurename{Fig.}
-}
-
-\captionsetup[bi-first]{bi-first}
-\captionsetup[bi-second]{bi-second}
-% \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=3bp}
-% \captionsetup[figure]{position=bottom,belowskip={6bp-\intextsep},aboveskip=3bp}
-\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
-\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
-
-% subfig 间距设定
-\captionsetup[subfloat]{captionskip=0pt,farskip=0pt}
-
-% \renewcommand{\thesubfigure}{(\alph{subfigure})}
-% \renewcommand{\thesubtable}{(\alph{subtable})}
-
-% lscape 2021-07-31 landscape 
-\RequirePackage{pdflscape}
-
-% rotating 2021-08-01
-\RequirePackage{rotating}
-
-% % typearea 2021-08-01
-% \RequirePackage{typearea}
-
-
-
-
-
-
 \let\XAUAT@LT@array\LT@array
 \renewcommand{\LT@array}{\wuhao[1.5]\XAUAT@LT@array}
 
@@ -386,9 +375,6 @@
     \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
     \reserved@a\@xhline
 }
-
-
-
 
 % ctexset
 \ctexset{%
@@ -436,14 +422,6 @@
     linestretch=\ccwd,
 }
 
-% 表格字号、行距
-\BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
-\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
-% \BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-09
-% \BeforeBeginEnvironment{longtable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
-% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
-
-
 \newcounter{XAUAT@bookmark}
 \NewDocumentCommand\XAUAT@chapter{s o m o}{%
     \IfBooleanF{#1}{%
@@ -459,9 +437,6 @@
         }
         { % 第二个参数有，且不为空，则将其加入目录
             \addcontentsline{toc}{chapter}{#3}
-            % NOTE: The hyperref package dislikes authors using \addcontentsline. To get
-            % it to work properly with hyperref you normally have to put \phantomsection (a
-            % macro dened within the hyperref package) immediately before \addcontentsline.
         }
     }
     { % 若没有指定该参数（即#2=-NoValue-），表示目录出现title
