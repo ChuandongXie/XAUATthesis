@@ -112,13 +112,13 @@
 \RequirePackage{graphicx}
 
 % 并排图形
-% \RequirePackage[labelformat=simple]{subcaption}
+\RequirePackage[labelformat=simple]{subcaption}
 % \captionsetup{skip=\dimexpr\abovecaptionskip-3pt}
 % TODO: caption 与 subcaption 的距离
 
 \RequirePackage{caption}
 
-\RequirePackage{subfig}
+% \RequirePackage{subfig}
 % \captionsetup1
 
 % \pkg{pdfpages} 宏包便于插入扫描后的声明页 PDF 文档。
