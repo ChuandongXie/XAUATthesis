@@ -6,6 +6,9 @@ A LaTeX thesis template for Xi'an University of Architecture and Technology
 
 v1.0.0 Beta
 
+## 重要说明
+* `XAUATthesis v1.0.0 Beta`主要根据研究生手册论文要求编写。目前本人正在进行论文写作，cls文件一直处于完善状态，最新的cls文件会更新到patch-1。
+
 ## 主要参考资料
 * [西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)（或见/attachments）
 * [LATEX2E for class and package writers](https://www.latex-project.org)
