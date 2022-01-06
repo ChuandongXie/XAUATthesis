@@ -50,13 +50,14 @@
 }
 
 \DeclareBoolOption{electronic}
-\DeclareBoolOption{pifootnote}  % 脚注标记中使用 \pkg{pifont} 的带圈数字
+% \DeclareBoolOption{pifootnote}  % 脚注标记中使用 \pkg{pifont} 的带圈数字
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
-\kvsetkeys{XAUAT}{%
-    pifootnote,
-}
+% \kvsetkeys{XAUAT}{%
+%     pifootnote,
+% }
 
 \PassOptionsToPackage{AutoFakeBold=2.17,AutoFakeSlant=true}{xeCJK}
+
 % ------------------------------------------------------------------------------
 % execution of options
 % ------------------------------------------------------------------------------
@@ -93,7 +94,8 @@
 % ------------------------------------------------------------------------------
 % package loading
 % ------------------------------------------------------------------------------
-\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright]{ctexbook}
+\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=none]{ctexbook}
+\ctexset{fontset=windows} % 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script" // 需要先定义fontset为none
 
 % \AmSTeX\ 宏包
 \RequirePackage{amsmath,amssymb}
@@ -111,9 +113,13 @@
 
 % 并排图形
 \RequirePackage[labelformat=simple]{subcaption}
+% \captionsetup{skip=\dimexpr\abovecaptionskip-3pt}
+% TODO: caption 与 subcaption 的距离
 
-% 双语题注
-\RequirePackage[list=off]{bicaption}
+\RequirePackage{caption}
+
+% \RequirePackage{subfig}
+% \captionsetup1
 
 % \pkg{pdfpages} 宏包便于插入扫描后的声明页 PDF 文档。
 \RequirePackage{pdfpages}
@@ -122,18 +128,13 @@
 % 列表环境
 \RequirePackage[shortlabels]{enumitem}
 \setlist{nosep}
+\setlist[itemize]{align=parleft,left=0pt..1em} % 2021-07-12
 
 %  environ使得我们在创建新的环境的时候可以定义new author interface
 \RequirePackage{environ}
 
 % 空白页
 \RequirePackage{emptypage} 
-
-% pifont有很多Pi fonts，如Dingbats（杂锦字体）, Symbol, etc
-\ifXAUAT@pifootnote
-    \RequirePackage{pifont}
-\fi
-\RequirePackage[bottom,perpage,hang]{footmisc}
 
 % 利用 \pkg{CJKfntef} 实现汉字的下划线和盒子内两段对齐，并可以避免
 % \cs{makebox}\oarg{width}\oarg{s} 可能产生的 underful boxes。
@@ -144,10 +145,19 @@
 
 % 表格控制
 \RequirePackage{array}
-\RequirePackage{longtable}
 
-% 使用三线表：\cs{toprule}，\cs{midrule}，\cs{bottomrule}。
+
+% 使用三线表：\cs{toprule}，\cs{midrule}，\cs{bottomrule}。%TODO:
 \RequirePackage{booktabs}
+\setlength\aboverulesep{0ex} % 2021-07-11 discontinued vertical line
+\setlength\belowrulesep{0ex}
+
+% 长表格
+\RequirePackage{longtable}
+% \setlength\LTleft{0pt plus \textwidth} % 长表格位置/间距
+% \setlength\LTright{0pt plus \textwidth}
+
+
 
 % Latex 3 new command
 \RequirePackage{xparse}
@@ -157,6 +167,9 @@
 
 % 调整行距
 \RequirePackage{setspace}
+
+% subfigure
+% \RequirePackage[tight]{subfigure}
 
 
 % 参考文献，使用biblatex包
@@ -176,13 +189,29 @@
     bookmarksopen=true,
     bookmarksopenlevel=1,
     breaklinks=true,
-    colorlinks=false,
+    colorlinks=true, % 2021-05-26 true,方便查看
     plainpages=false,
     pdfborder=0 0 0,
 }
 
+\usepackage{cleveref} % 2021-07-20
+\crefname{table}{表}{表}
+\crefname{figure}{图}{图}
+\crefname{equation}{式}{式} % 2021-11-25 11:03:49
+\newcommand{\crefrangeconjunction}{-}
+
+% 定制表格字号
+\RequirePackage{etoolbox}
+
+\RequirePackage{threeparttable}
+
+% \RequirePackage{tabularx}
+
 % 设置 url 样式，与上下文一致
 \urlstyle{same}
+
+% % typearea
+% \RequirePackage{typearea}
 
 % 页面设置
 \RequirePackage{geometry}
@@ -199,8 +228,8 @@
     nomarginpar,
     ignoreall,
     showcrop,
-    % showframe,
-}	
+    % showframe, % 展示边框，暂不查看 2021-05-26
+}   
 
 \newcommand{\XAUAT@define@fontsize}[2]{%
     \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
@@ -241,6 +270,12 @@
     \renewcommand{\footrulewidth}{0pt}
 }
 
+% \fancypagestyle{mylandscape}{ % 2021-08-01
+%     \fancyhf{} %Clears the header/footer
+%     \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % 页眉线，参https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
+%     \renewcommand{\footrulewidth}{0pt}
+% }
+
 \renewcommand\frontmatter{%
     \cleardoublepage
     \@mainmatterfalse
@@ -262,22 +297,11 @@
 }
 
 % 脚注
-\newcommand{\XAUAT@textcircled}[1]{%
-    \ifnum\value{#1} >9
-        \ClassError{XAUATthesis}%
-        {Too many footnotes in this page.}{Keep footnote less than 10.}
-    \fi
-    \ifXAUAT@pifootnote\ding{\the\numexpr\value{#1}+171\relax}%
-    \else%
-        \textcircled{\scriptsize\arabic{#1}}%
-    \fi
-}
-\renewcommand{\thefootnote}{\XAUAT@textcircled{footnote}}
-\renewcommand{\thempfootnote}{\XAUAT@textcircled{mpfootnote}}
+\RequirePackage[perpage,hang,bottom]{footmisc} % 2021-11-16 21-37-44
 \renewcommand{\footnoterule}{\vskip-3\p@\hrule\@width0.3\textwidth\@height0.4\p@\vskip2.6\p@}
 \let\XAUAT@footnotesize\footnotesize
-\renewcommand\footnotesize{\XAUAT@footnotesize\small}
-\footnotemargin 1em\relax
+\renewcommand\footnotesize{\XAUAT@footnotesize\xiaowu}
+\footnotemargin 0.5em\relax
 
 % 标记样式
 \let\XAUAT@makefnmark\@makefnmark
@@ -296,10 +320,13 @@
 \allowdisplaybreaks[4]
 \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
 
+% 确定浮动对象的位置
+\RequirePackage{float} % 2021-11-17 16:25:47
+
 % 浮动体距离
 \setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
 \setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
-\setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}
+% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}s
 \setlength{\@fptop}{0pt \@plus 1fil}
 \setlength{\@fpsep}{12pt \@plus 2fil}
 \setlength{\@fpbot}{0pt \@plus 1fil}
@@ -313,20 +340,43 @@
 \DeclareCaptionLabelSeparator{XAUAT}{\hspace{1em}}
 \DeclareCaptionFont{XAUAT}{\wuhao[1.5]}
 \captionsetup{labelformat=XAUAT,labelsep=XAUAT,font=XAUAT}
-\captionsetup[sub]{font=XAUAT,skip=6bp}
+% \captionsetup[sub]{font=XAUAT,skip=6bp}
+\captionsetup{justification=centering} % 2021-11-25 10:43:45
 
+% bicaption
+\RequirePackage[list=off]{bicaption}
+\captionsetup{bi-lang=both}
 \DeclareCaptionOption{bi-first}[format=hang,hangindent=-0.5em]{}
 \DeclareCaptionOption{bi-second}[format=hang,hangindent=-2em]{
     \def\tablename{Table}
-    \def\figurename{Figure}}
+    \def\figurename{Fig.}
+}
 
 \captionsetup[bi-first]{bi-first}
 \captionsetup[bi-second]{bi-second}
-\captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=3bp}
-\captionsetup[figure]{position=bottom,belowskip={6bp-\intextsep},aboveskip=3bp}
+% \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=3bp}
+% \captionsetup[figure]{position=bottom,belowskip={6bp-\intextsep},aboveskip=3bp}
+\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
+\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
 
-\renewcommand{\thesubfigure}{(\alph{subfigure})}
-\renewcommand{\thesubtable}{(\alph{subtable})}
+% subfig 间距设定
+\captionsetup[subfloat]{captionskip=0pt,farskip=0pt}
+
+% \renewcommand{\thesubfigure}{(\alph{subfigure})}
+% \renewcommand{\thesubtable}{(\alph{subtable})}
+
+% lscape 2021-07-31 landscape 
+\RequirePackage{pdflscape}
+
+% rotating 2021-08-01
+\RequirePackage{rotating}
+
+% % typearea 2021-08-01
+% \RequirePackage{typearea}
+
+
+
+
 
 
 \let\XAUAT@LT@array\LT@array
@@ -336,6 +386,9 @@
     \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
     \reserved@a\@xhline
 }
+
+
+
 
 % ctexset
 \ctexset{%
@@ -370,15 +423,26 @@
     subsubsection={%
         aftername=\relax,
         afterindent=true,
-        beforeskip=7.7bp \@plus 1ex \@minus .2ex,
-        afterskip=0bp \@plus .2ex,
-        format=\xiaosi[1.3]\songti,
+        % beforeskip=7.7bp \@plus 1ex \@minus .2ex,
+        % afterskip=7.7bp \@plus .2ex,
+        beforeskip=6bp,
+        afterskip=0bp,
+        format=\xiaosi[1.3]\songti\bfseries,
+        indent=2\ccwd, % 2021-11-16 22:00:32
     },
     punct=quanjiao,
     space=auto,
     autoindent=true,
     linestretch=\ccwd,
 }
+
+% 表格字号、行距
+\BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
+\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
+% \BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-09
+% \BeforeBeginEnvironment{longtable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
+% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
+
 
 \newcounter{XAUAT@bookmark}
 \NewDocumentCommand\XAUAT@chapter{s o m o}{%
@@ -506,9 +570,9 @@
     \centering
     \begin{tabular}{r@{}lp{5cm}<{\centering}r@{}l}
         \XAUAT@cover@font\XAUAT@classification &
-        \XAUAT@underline{8em}{\XAUAT@coverkey@font\XAUAT@disciplineclassification}&&
+        \XAUAT@underline{10em}{\XAUAT@coverkey@font\XAUAT@disciplineclassification}&&
         \XAUAT@cover@font\XAUAT@cstudentnumbertitle&
-        \XAUAT@underline{8em}{\XAUAT@coverkey@font\XAUAT@studentnumber}
+        \XAUAT@underline{10em}{\XAUAT@coverkey@font\XAUAT@studentnumber}
     \end{tabular}
 
     \vskip 54pt
@@ -518,8 +582,8 @@
     \vskip 54pt
 
     \begin{spacing}{2.0}
-    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{16em}{\XAUAT@ctitlefirst}}
-    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{16em}{\XAUAT@ctitlesecond}}
+    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{20em}{\XAUAT@ctitlefirst}}
+    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{20em}{\XAUAT@ctitlesecond}}
     \vskip 54pt
 
     \begin{tabular}{r@{}l}
@@ -769,7 +833,8 @@
 \let\inlinecite\parencite
 \setlength{\bibnamesep}{0ex}
 \setlength{\bibinitsep}{0ex}
-\newcommand\printXAUATbibliography{\printbibliography[heading=bibintoc]\clearpage}
+\newcommand\printXAUATbibliography{\printbibliography[heading=bibintoc]\clearpage\sloppy % 解决行溢出
+}
 
 
 % 图表索引
