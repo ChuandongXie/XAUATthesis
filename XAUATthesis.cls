@@ -94,8 +94,8 @@
 % ------------------------------------------------------------------------------
 % package loading
 % ------------------------------------------------------------------------------
-\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=none]{ctexbook}
-\ctexset{fontset=windows} % 2021-05-26 solve warning "Font FandolSong-Regular does not contain requested(fontspec) Script" // fontset=none
+\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=windows]{ctexbook}
+% \ctexset{fontset=windows} % 2021-05-26 solve warning "Font FandolSong-Regular does not contain requested(fontspec) Script" // fontset=none
 
 % biblatex
 \ifXAUAT@numeric
@@ -112,6 +112,10 @@
 % allow equation break
 % \allowdisplaybreaks[4]
 % \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
+
+% New TX font
+\RequirePackage{newtxtext}
+\RequirePackage{newtxmath}
 
 % environ
 \RequirePackage{environ}
