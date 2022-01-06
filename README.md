@@ -13,11 +13,14 @@ v1.0.0 Beta
 * The LaTeX Companion, Second Edition. by Frank Mittelbach, Michel Goossens, et al.
 * [marquistj13/TongjiThesis 2020/07/18](https://github.com/marquistj13/TongjiThesis)
 
+## 重要说明
+* `XAUATthesis v1.0.0 Beta`主要根据研究生手册论文要求编写，可能还有些内容需要完善。目前本人正在进行论文写作，cls文件一直处于完善状态，最新的cls文件会更新到patch-1。
+
 ## 版本说明
 * 本版本为XAUATthesis v1.0.0 beta，可能存在`疏漏与错误`，有兴趣使用的同学发现问题请告知于我；或提出建议，笔者将不胜感激；
 * 本模板原则上按照[西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)中`《学位论文撰写标准》`一章进行编写，但是该章`缺乏维护`，许多详尽要求未给出，甚至存在过时要求，式样落后等；笔者在局部位置作了调整；
-* 未引入cleveref宏包，目前`CTeX`与`hyperref`、`cleveref `似乎还有不兼容之处，见[ctex, hyperref, cleveref 宏包冲突](https://gitmemory.com/issue/CTeX-org/ctex-kit/524/648526619) - （已解决）；
-* XAUATthesis在win 10系统，TeXlive 2020、MikTeX 20.6.29发行版可正常编译，在此感谢飘大王。
+* 封面`西安建筑科技大学`采用华文行楷字体；
+* XAUATthesis在TeXlive 2021、MikTeX 20.6.29发行版可正常编译。
 
 ## 使用说明
 * 本模板包含`XAUATthesis.cls`（模板文件），`XAUATthesis.cfg`（配置文件），`XAUATutils.sty`（引入宏包文件）及主文档`XAUATthesis.tex`;
@@ -41,3 +44,6 @@ v1.0.0 Beta
 * 2021-11-17 float，锁定浮动体位置
 * 2021-11-25 caption 居中
 * 2021-11-25 cleveref 公式
+* 2022-01-02 use subcaption
+* 2022-01-05 重新编排.cls
+* 2022-01-06 引入wrapfig包
