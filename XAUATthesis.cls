@@ -128,6 +128,8 @@
 
 % subcaption
 \RequirePackage{subcaption} % 2022-01-02 09:20:41
+% \RequirePackage[labelformat=simple]{subcaption} % if want parentheses around the sub-figure part of the reference, look like '1(a)'
+% \renewcommand\thesubfigure{(\alph{subfigure})}
 
 % insert pdf pages
 \RequirePackage{pdfpages}
@@ -160,6 +162,9 @@
 
 % multirow
 \RequirePackage{multirow}
+
+% wrapfigure - wrapping text around figures
+\RequirePackage{wrapfig}
 
 % slashbox in table
 % \RequirePackage{slashbox}
@@ -728,7 +733,9 @@
     \ifthenelse{\equal{\XAUAT@efunds}{}}{}
     {
         \noindent
+        \edef\prevhbadness{\the\hbadness}\hbadness=2600 % might occur underfull warning, increase the hbadness to 2600
         \parbox[c]{\linewidth}{\hangindent 1em\bfseries$\ast$\hspace{0.5em}\XAUAT@efunds}
+        \hbadness=\prevhbadness\relax % recover previous hbadness
     }
 }
 
