@@ -138,7 +138,7 @@
 % enumitem
 \RequirePackage[shortlabels]{enumitem}
 \setlist{nosep}
-\setlist[itemize]{align=parleft,left=0pt..1em} % 2021-07-12
+\setlist[itemize]{left=2em..3em} % 2021-07-12
 
 % emptypage
 \RequirePackage{emptypage} 
@@ -350,6 +350,7 @@
     \pagenumbering{arabic}
     \pagestyle{XAUAT@headings}
     \renewcommand\thesubsubsection{（\arabic{subsubsection}）}
+    \renewcommand\theparagraph{\Roman{paragraph}} % set paragraph label as Roman
 }
 
 \renewcommand\backmatter{%
@@ -430,6 +431,12 @@
     autoindent=true,
     linestretch=\ccwd,
 }
+
+% change paragraph style
+\RequirePackage[indentafter]{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}{\xiaosi[1.3]\songti\bfseries}{\theparagraph}{1ex}{}
+\titlespacing*{\paragraph}{2em}{6bp}{0bp}
 
 \newcounter{XAUAT@bookmark}
 \NewDocumentCommand\XAUAT@chapter{s o m o}{%
@@ -763,7 +770,7 @@
 }
 
 \setcounter{tocdepth}{2}
-\setcounter{secnumdepth}{3}
+% \setcounter{secnumdepth}{4}
 
 \RequirePackage{titletoc}
 \contentsmargin{1.5em}
