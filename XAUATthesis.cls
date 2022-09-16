@@ -1,9 +1,9 @@
 % ------------------------------------------------------------------------------
 % identification
 % ------------------------------------------------------------------------------
-\NeedsTeXFormat{LaTeX2e}[2020/02/02]
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
 \ProvidesClass{XAUATthesis}
-[2020/08/10 v1.0.0 Beta Xi'an University of Architecture & Techenology Thesis Template]
+[2020/08/10 v1.0.0 Xi'an University of Architecture & Techenology Thesis Template]
 % ------------------------------------------------------------------------------
 % initial code
 % ------------------------------------------------------------------------------
@@ -116,6 +116,7 @@
 % New TX font
 \RequirePackage{newtxtext}
 \RequirePackage{newtxmath}
+\defaultfontfeatures{} % 2022-09-16 14:37:29 Fixing font cannot be found problem (TexLive 2022) https://www.overleaf.com/blog/tex-live-2022-now-available
 
 % environ
 \RequirePackage{environ}
@@ -128,8 +129,6 @@
 
 % subcaption
 \RequirePackage{subcaption} % 2022-01-02 09:20:41
-% \RequirePackage[labelformat=simple]{subcaption} % if want parentheses around the sub-figure part of the reference, look like '1(a)'
-% \renewcommand\thesubfigure{(\alph{subfigure})}
 
 % insert pdf pages
 \RequirePackage{pdfpages}
@@ -160,6 +159,13 @@
 % threeparttable
 \RequirePackage{threeparttable}
 
+% tabularx % 2022-07-17 12:05:41
+\RequirePackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X} % https://tex.stackexchange.com/questions/89166/centering-in-tabularx-and-x-columns
+
+% tabulary % 2022-09-16 09:42:45
+\RequirePackage{tabulary}
+
 % multirow
 \RequirePackage{multirow}
 
@@ -174,6 +180,14 @@
   \begin{tabular}{@{}#1@{}}#2\end{tabular}
 }
 
+% Equation 2022-06-07
+\RequirePackage{empheq}
+
+% Underline break 2022-06-08
+\RequirePackage{soul}
+% Underline break for Chinese 2022-06-10
+\RequirePackage{ulem}
+
 % tikz
 \RequirePackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -181,6 +195,64 @@
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
+\usetikzlibrary{bending}
+%% \spiral -- https://tex.stackexchange.com/questions/29147/spiral-spring-in-tikz
+\newif\ifspiral@is@clockwise
+  \pgfkeys{
+    spiral/.is family,
+    spiral,
+    start angle/.initial=0,
+    end angle/.initial=0,
+    start radius/.initial=0,
+    end radius/.initial=1,
+    revolutions/.initial=2,
+    name/.initial=,
+    center/.initial={(0,0)},
+    sample rate/.initial =5,
+    clockwise spiral/.is if=spiral@is@clockwise,
+    clockwise spiral/.default=false,
+    clockwise/.style={clockwise spiral=true},
+    default spiral/.style={start angle=0,end angle=0, start radius=0, end radius=1, revolutions=2, name=, center={(0,0)}, sample rate=5, clockwise spiral=false}
+  }
+  \newcommand\spiral[2][]{
+    \pgfkeys{spiral, default spiral,#2,
+      start angle/.get=\spiral@start@angle,
+      end angle/.get=\spiral@end@angle,
+      start radius/.get=\spiral@start@radius,
+      end radius/.get=\spiral@end@radius,
+      revolutions/.get=\spiral@revolutions,
+      name/.get=\spiral@name,
+      sample rate/.get=\spiral@sample@rate,
+      center/.get=\spiral@center
+      }
+  \def\spiral@start@name{}
+  \def\spiral@end@name{}
+  \ifspiral@is@clockwise
+        \renewcommand*{\spiral@start@angle}{\pgfkeysvalueof{/spiral/end angle}}
+        \renewcommand*{\spiral@end@angle}{\pgfkeysvalueof{/spiral/start angle}}
+        \renewcommand*{\spiral@start@radius}{\pgfkeysvalueof{/spiral/end radius}}
+        \renewcommand*{\spiral@end@radius}{\pgfkeysvalueof{/spiral/start radius}}
+        \if\relax\detokenize{\spiral@name}\relax
+        \else
+          \renewcommand*{\spiral@start@name}{\spiral@name end}
+          \renewcommand*{\spiral@end@name}{\spiral@name start}
+        \fi
+    \else
+        \if\relax\detokenize{\spiral@name}\relax
+        \else
+          \renewcommand*{\spiral@start@name}{\spiral@name start}
+          \renewcommand*{\spiral@end@name}{\spiral@name end}
+        \fi
+  \fi
+  \pgfmathsetmacro{\spiral@domain}{\spiral@end@angle+\spiral@revolutions*360}
+  \pgfmathsetmacro{\spiral@growth}{180*(\spiral@end@radius-\spiral@start@radius)/(pi*(\spiral@domain-\spiral@start@angle))}
+  \draw [#1,
+         shift={\spiral@center},
+         domain=\spiral@start@angle*pi/180:\spiral@domain*pi/180,
+         variable=\t,
+         smooth,
+         samples=int(\spiral@domain/\spiral@sample@rate)] node[coordinate,shift={(\spiral@start@angle:\spiral@start@radius)}](\spiral@start@name){} plot ({\t r}: {\spiral@start@radius+\spiral@growth*\t-\spiral@growth*\spiral@start@angle*pi/180}) node[coordinate](\spiral@end@name){}
+  }
 
 % use tikz-imagelabels
 \RequirePackage{tikz-imagelabels}
@@ -227,12 +299,49 @@
     plainpages=false,
     pdfborder=0 0 0,
 }
-
+\pdfstringdefDisableCommands{\def\cite#1{#1}} % 2022-06-07 Remove warning: token not allowed in a pdf string
+\RequirePackage{layouts} % TEMP
 \usepackage{cleveref} % 2021-07-20
+% Simplified Chinese: https://gist.github.com/anamewing/5154b6278f63e8d738bb5d57413a923f
 \crefname{table}{表}{表}
 \crefname{figure}{图}{图}
-\crefname{equation}{式}{式} % 2021-11-25 11:03:49
-\newcommand{\crefrangeconjunction}{-}
+\crefname{equation}{式}{式}
+\crefname{page}{页}{页}
+\crefname{chapter}{章}{章}
+\crefname{section}{节}{节}
+\crefname{appendix}{附录}{附录}
+\crefname{theorem}{定理}{定理}
+\crefname{lemma}{引理}{引理}
+\crefname{corollary}{推论}{推论}
+\crefname{proposition}{命题}{命题}
+\crefname{definition}{定义}{定义}
+\crefname{example}{例}{例}
+\crefname{algorithm}{算法}{算法}
+\crefname{listing}{列表}{列表}
+\crefname{line}{行}{行}
+
+\crefformat{chapter}{#2第#1章#3}
+\crefformat{section}{#2第#1节#3}
+\crefformat{subsection}{#2第#1节#3}
+\crefformat{subsubsection}{#2第#1节#3}
+
+\crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
+\crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsection}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsubsection}{#3第#1节#4至#5第#2节#6}
+
+\crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{，#2第#1章#3}{和#2第#1章#3}
+\crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsubsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+
+\newcommand{\crefpairconjunction}{和}
+\newcommand{\crefmiddleconjunction}{，}
+\newcommand{\creflastconjunction}{~和~}
+\newcommand{\crefpairgroupconjunction}{~和~}
+\newcommand{\crefmiddlegroupconjunction}{，}
+\newcommand{\creflastgroupconjunction}{~和~}
+\newcommand{\crefrangeconjunction}{~至~}
 
 % url style, same as the context
 \urlstyle{same}
@@ -241,9 +350,12 @@
 \RequirePackage{float} % 2021-11-17 16:25:47
 
 % 浮动体距离
-\setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
-\setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
-% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}s
+% \setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
+% \setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
+% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}
+\setlength{\floatsep}{2pt \@plus 2pt \@minus 2pt}
+\setlength{\textfloatsep}{2pt \@plus 2pt \@minus 2pt}
+\setlength{\intextsep}{2pt \@plus 2pt \@minus 2pt}
 \setlength{\@fptop}{0pt \@plus 1fil}
 \setlength{\@fpsep}{12pt \@plus 2fil}
 \setlength{\@fpbot}{0pt \@plus 1fil}
@@ -276,7 +388,9 @@
 
 % 表格字号、行距
 \BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
-\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
+\BeforeBeginEnvironment{tabular*}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:13:53
+\BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:20:11
+\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 threeparttable fontsize
 % \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
 
 % 页面设置
@@ -360,10 +474,12 @@
 
 % footmisc
 \RequirePackage[perpage,hang,bottom]{footmisc} % 2021-11-16 21-37-44
+\footnotemargin 0.5em\relax
 \renewcommand{\footnoterule}{\vskip-3\p@\hrule\@width0.3\textwidth\@height0.4\p@\vskip2.6\p@}
 \let\XAUAT@footnotesize\footnotesize
 \renewcommand\footnotesize{\XAUAT@footnotesize\xiaowu}
-\footnotemargin 0.5em\relax
+% \renewcommand{\thefootnote}{\arabic{footnote}.~} % 2022-06-09 10:25:55 Adding dot after numbering
+
 
 % 标记样式
 \let\XAUAT@makefnmark\@makefnmark
@@ -372,11 +488,12 @@
 \apptocmd{\@makefntext}{\let\@makefnmark\XAUAT@makefnmark}{}{}
 
 \renewcommand{\normalsize}{\fontsize{12pt}{22bp}\selectfont}
-\abovedisplayskip=0pt \@plus 2bp \@minus 2bp
-\abovedisplayshortskip=0bp \@plus 2bp \@minus 2bp
-\belowdisplayskip=10pt \@plus 2bp \@minus 2bp
-\belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
-\setlength\jot{27pt}
+% \abovedisplayskip=0pt \@plus 2bp \@minus 2bp
+% \abovedisplayshortskip=0bp \@plus 2bp \@minus 2bp
+% \belowdisplayskip=10pt \@plus 2bp \@minus 2bp
+% \belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
+\setlength\jot{10pt}
+
 
 \let\XAUAT@LT@array\LT@array
 \renewcommand{\LT@array}{\wuhao[1.5]\XAUAT@LT@array}
