@@ -1,9 +1,9 @@
 % ------------------------------------------------------------------------------
 % identification
 % ------------------------------------------------------------------------------
-\NeedsTeXFormat{LaTeX2e}[2020/02/02]
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
 \ProvidesClass{XAUATthesis}
-[2020/08/10 v1.0.0 Beta Xi'an University of Architecture & Techenology Thesis Template]
+[2020/08/10 v1.0.0 Xi'an University of Architecture & Techenology Thesis Template]
 % ------------------------------------------------------------------------------
 % initial code
 % ------------------------------------------------------------------------------
@@ -94,85 +94,10 @@
 % ------------------------------------------------------------------------------
 % package loading
 % ------------------------------------------------------------------------------
-\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=none]{ctexbook}
-\ctexset{fontset=windows} % 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script" // 需要先定义fontset为none
+\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=windows]{ctexbook}
+% \ctexset{fontset=windows} % 2021-05-26 solve warning "Font FandolSong-Regular does not contain requested(fontspec) Script" // fontset=none
 
-% \AmSTeX\ 宏包
-\RequirePackage{amsmath,amssymb}
-
-% 设置 Times New Roman，Helvetic
-% 这是txfonts的替代品，即txfonts.sty分成了独立的package：newtxtext 和 newtxmath
-\RequirePackage[defaultsups]{newtxtext}
-\RequirePackage{newtxmath}
-
-% 使用 Courier 字体
-\RequirePackage{courier}
-
-% 图形支持宏包
-\RequirePackage{graphicx}
-
-% 并排图形
-\RequirePackage[labelformat=simple]{subcaption}
-% \captionsetup{skip=\dimexpr\abovecaptionskip-3pt}
-% TODO: caption 与 subcaption 的距离
-
-\RequirePackage{caption}
-
-% \RequirePackage{subfig}
-% \captionsetup1
-
-% \pkg{pdfpages} 宏包便于插入扫描后的声明页 PDF 文档。
-\RequirePackage{pdfpages}
-\includepdfset{fitpaper=true}
-
-% 列表环境
-\RequirePackage[shortlabels]{enumitem}
-\setlist{nosep}
-\setlist[itemize]{align=parleft,left=0pt..1em} % 2021-07-12
-
-%  environ使得我们在创建新的环境的时候可以定义new author interface
-\RequirePackage{environ}
-
-% 空白页
-\RequirePackage{emptypage} 
-
-% 利用 \pkg{CJKfntef} 实现汉字的下划线和盒子内两段对齐，并可以避免
-% \cs{makebox}\oarg{width}\oarg{s} 可能产生的 underful boxes。
-\RequirePackage{CJKfntef}
-
-% 定理类环境宏包，其中 \pkg{amsmath} 选项用来兼容 \AmSTeX\ 的宏包
-\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
-
-% 表格控制
-\RequirePackage{array}
-
-
-% 使用三线表：\cs{toprule}，\cs{midrule}，\cs{bottomrule}。%TODO:
-\RequirePackage{booktabs}
-\setlength\aboverulesep{0ex} % 2021-07-11 discontinued vertical line
-\setlength\belowrulesep{0ex}
-
-% 长表格
-\RequirePackage{longtable}
-% \setlength\LTleft{0pt plus \textwidth} % 长表格位置/间距
-% \setlength\LTright{0pt plus \textwidth}
-
-
-
-% Latex 3 new command
-\RequirePackage{xparse}
-
-% 页眉页脚
-\RequirePackage{fancyhdr}
-
-% 调整行距
-\RequirePackage{setspace}
-
-% subfigure
-% \RequirePackage[tight]{subfigure}
-
-
-% 参考文献，使用biblatex包
+% biblatex
 \ifXAUAT@numeric
     \RequirePackage[backend=biber,style=gb7714-2015,gbpub=false,isbn=false,doi=false,gbtitlelink=true,url=false,sortlocale=zh__pinyin]{biblatex} 
 \else
@@ -180,6 +105,187 @@
         \RequirePackage[backend=biber,style=gb7714-2015ay,gbpub=false,isbn=false,doi=false,gbtitlelink=true,url=false,sortlocale=zh__pinyin]{biblatex} 
     \fi
 \fi
+
+% % AmSTeX
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+% allow equation break
+% \allowdisplaybreaks[4]
+% \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
+
+% New TX font
+\RequirePackage{newtxtext}
+\RequirePackage{newtxmath}
+\defaultfontfeatures{} % 2022-09-16 14:37:29 Fixing font cannot be found problem (TexLive 2022) https://www.overleaf.com/blog/tex-live-2022-now-available
+
+% environ
+\RequirePackage{environ}
+
+% graphicx
+\RequirePackage{graphicx}
+
+% caption
+\RequirePackage{caption}
+
+% subcaption
+\RequirePackage{subcaption} % 2022-01-02 09:20:41
+
+% insert pdf pages
+\RequirePackage{pdfpages}
+\includepdfset{fitpaper=true}
+
+% enumitem
+\RequirePackage[shortlabels]{enumitem}
+\setlist{nosep}
+\setlist[itemize]{left=2em..3em} % 2021-07-12
+
+% emptypage
+\RequirePackage{emptypage} 
+
+% CJKfntef
+\RequirePackage{CJKfntef}
+
+% booktabs
+\RequirePackage{booktabs}
+\setlength\aboverulesep{0ex} % 2021-07-11 discontinued vertical line
+\setlength\belowrulesep{0ex}
+
+% array
+\RequirePackage{array}
+
+% longtable
+\RequirePackage{longtable}
+
+% threeparttable
+\RequirePackage{threeparttable}
+
+% tabularx % 2022-07-17 12:05:41
+\RequirePackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X} % https://tex.stackexchange.com/questions/89166/centering-in-tabularx-and-x-columns
+
+% tabulary % 2022-09-16 09:42:45
+\RequirePackage{tabulary}
+
+% multirow
+\RequirePackage{multirow}
+
+% wrapfigure - wrapping text around figures
+\RequirePackage{wrapfig}
+
+% slashbox in table
+% \RequirePackage{slashbox}
+
+% tabincell command
+\newcommand{\tabincell}[2]{
+  \begin{tabular}{@{}#1@{}}#2\end{tabular}
+}
+
+% Equation 2022-06-07
+\RequirePackage{empheq}
+
+% Underline break 2022-06-08
+\RequirePackage{soul}
+% Underline break for Chinese 2022-06-10
+\RequirePackage{ulem}
+
+% tikz
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{bending}
+%% \spiral -- https://tex.stackexchange.com/questions/29147/spiral-spring-in-tikz
+\newif\ifspiral@is@clockwise
+  \pgfkeys{
+    spiral/.is family,
+    spiral,
+    start angle/.initial=0,
+    end angle/.initial=0,
+    start radius/.initial=0,
+    end radius/.initial=1,
+    revolutions/.initial=2,
+    name/.initial=,
+    center/.initial={(0,0)},
+    sample rate/.initial =5,
+    clockwise spiral/.is if=spiral@is@clockwise,
+    clockwise spiral/.default=false,
+    clockwise/.style={clockwise spiral=true},
+    default spiral/.style={start angle=0,end angle=0, start radius=0, end radius=1, revolutions=2, name=, center={(0,0)}, sample rate=5, clockwise spiral=false}
+  }
+  \newcommand\spiral[2][]{
+    \pgfkeys{spiral, default spiral,#2,
+      start angle/.get=\spiral@start@angle,
+      end angle/.get=\spiral@end@angle,
+      start radius/.get=\spiral@start@radius,
+      end radius/.get=\spiral@end@radius,
+      revolutions/.get=\spiral@revolutions,
+      name/.get=\spiral@name,
+      sample rate/.get=\spiral@sample@rate,
+      center/.get=\spiral@center
+      }
+  \def\spiral@start@name{}
+  \def\spiral@end@name{}
+  \ifspiral@is@clockwise
+        \renewcommand*{\spiral@start@angle}{\pgfkeysvalueof{/spiral/end angle}}
+        \renewcommand*{\spiral@end@angle}{\pgfkeysvalueof{/spiral/start angle}}
+        \renewcommand*{\spiral@start@radius}{\pgfkeysvalueof{/spiral/end radius}}
+        \renewcommand*{\spiral@end@radius}{\pgfkeysvalueof{/spiral/start radius}}
+        \if\relax\detokenize{\spiral@name}\relax
+        \else
+          \renewcommand*{\spiral@start@name}{\spiral@name end}
+          \renewcommand*{\spiral@end@name}{\spiral@name start}
+        \fi
+    \else
+        \if\relax\detokenize{\spiral@name}\relax
+        \else
+          \renewcommand*{\spiral@start@name}{\spiral@name start}
+          \renewcommand*{\spiral@end@name}{\spiral@name end}
+        \fi
+  \fi
+  \pgfmathsetmacro{\spiral@domain}{\spiral@end@angle+\spiral@revolutions*360}
+  \pgfmathsetmacro{\spiral@growth}{180*(\spiral@end@radius-\spiral@start@radius)/(pi*(\spiral@domain-\spiral@start@angle))}
+  \draw [#1,
+         shift={\spiral@center},
+         domain=\spiral@start@angle*pi/180:\spiral@domain*pi/180,
+         variable=\t,
+         smooth,
+         samples=int(\spiral@domain/\spiral@sample@rate)] node[coordinate,shift={(\spiral@start@angle:\spiral@start@radius)}](\spiral@start@name){} plot ({\t r}: {\spiral@start@radius+\spiral@growth*\t-\spiral@growth*\spiral@start@angle*pi/180}) node[coordinate](\spiral@end@name){}
+  }
+
+% use tikz-imagelabels
+\RequirePackage{tikz-imagelabels}
+\imagelabelset{
+  coarse grid color = red,
+  fine grid color = gray,
+  image label font = \sffamily\bfseries\small,
+  image label distance = 2mm,
+  image label back = black,
+  image label text = white,
+  coordinate label font = \sffamily\bfseries\scriptsize,
+  coordinate label distance = 2mm,
+  coordinate label back = black,
+  coordinate label text = white,
+  annotation font = \normalfont\xiaowu,
+  arrow distance = 1.5mm,
+  border thickness = 0.6pt,
+  arrow thickness = 0.4pt,
+  tip size = 1.2mm,
+  outer dist = 0.5cm,
+}
+
+% Latex 3 new command
+\RequirePackage{xparse}
+
+% setspace
+\RequirePackage{setspace}
+
+% lscape 2021-07-31 landscape 
+\RequirePackage{pdflscape}
+
+% rotating 2021-08-01
+\RequirePackage{rotating}
 
 % hyperref
 \RequirePackage{hyperref}
@@ -193,25 +299,99 @@
     plainpages=false,
     pdfborder=0 0 0,
 }
-
+\pdfstringdefDisableCommands{\def\cite#1{#1}} % 2022-06-07 Remove warning: token not allowed in a pdf string
+\RequirePackage{layouts} % TEMP
 \usepackage{cleveref} % 2021-07-20
+% Simplified Chinese: https://gist.github.com/anamewing/5154b6278f63e8d738bb5d57413a923f
 \crefname{table}{表}{表}
 \crefname{figure}{图}{图}
-\crefname{equation}{式}{式} % 2021-11-25 11:03:49
-\newcommand{\crefrangeconjunction}{-}
+\crefname{equation}{式}{式}
+\crefname{page}{页}{页}
+\crefname{chapter}{章}{章}
+\crefname{section}{节}{节}
+\crefname{appendix}{附录}{附录}
+\crefname{theorem}{定理}{定理}
+\crefname{lemma}{引理}{引理}
+\crefname{corollary}{推论}{推论}
+\crefname{proposition}{命题}{命题}
+\crefname{definition}{定义}{定义}
+\crefname{example}{例}{例}
+\crefname{algorithm}{算法}{算法}
+\crefname{listing}{列表}{列表}
+\crefname{line}{行}{行}
 
-% 定制表格字号
-\RequirePackage{etoolbox}
+\crefformat{chapter}{#2第#1章#3}
+\crefformat{section}{#2第#1节#3}
+\crefformat{subsection}{#2第#1节#3}
+\crefformat{subsubsection}{#2第#1节#3}
 
-\RequirePackage{threeparttable}
+\crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
+\crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsection}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsubsection}{#3第#1节#4至#5第#2节#6}
 
-% \RequirePackage{tabularx}
+\crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{，#2第#1章#3}{和#2第#1章#3}
+\crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsubsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
 
-% 设置 url 样式，与上下文一致
+\newcommand{\crefpairconjunction}{和}
+\newcommand{\crefmiddleconjunction}{，}
+\newcommand{\creflastconjunction}{~和~}
+\newcommand{\crefpairgroupconjunction}{~和~}
+\newcommand{\crefmiddlegroupconjunction}{，}
+\newcommand{\creflastgroupconjunction}{~和~}
+\newcommand{\crefrangeconjunction}{~至~}
+
+% url style, same as the context
 \urlstyle{same}
 
-% % typearea
-% \RequirePackage{typearea}
+% 确定浮动对象的位置
+\RequirePackage{float} % 2021-11-17 16:25:47
+
+% 浮动体距离
+% \setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
+% \setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
+% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}
+\setlength{\floatsep}{2pt \@plus 2pt \@minus 2pt}
+\setlength{\textfloatsep}{2pt \@plus 2pt \@minus 2pt}
+\setlength{\intextsep}{2pt \@plus 2pt \@minus 2pt}
+\setlength{\@fptop}{0pt \@plus 1fil}
+\setlength{\@fpsep}{12pt \@plus 2fil}
+\setlength{\@fpbot}{0pt \@plus 1fil}
+\renewcommand{\topfraction}{0.7}
+\renewcommand{\bottomfraction}{0.3}
+\renewcommand{\textfraction}{0.2}
+\renewcommand{\floatpagefraction}{0.5}
+
+% 浮动图形和表格标题样式
+\DeclareCaptionLabelFormat{XAUAT}{\wuhao[1.5]\normalfont #1~#2}
+\DeclareCaptionLabelSeparator{XAUAT}{\hspace{1em}}
+\DeclareCaptionFont{XAUAT}{\wuhao[1.5]}
+\captionsetup{labelformat=XAUAT,labelsep=XAUAT,font=XAUAT}
+\captionsetup{justification=centering} % 2021-11-25 10:43:45
+
+% bicaption
+\RequirePackage[list=off]{bicaption}
+\captionsetup{bi-lang=both}
+\DeclareCaptionOption{bi-first}[format=hang,hangindent=-0.5em]{}
+\DeclareCaptionOption{bi-second}[format=hang,hangindent=-2em]{
+    \def\tablename{Table}
+    \def\figurename{Fig.}
+}
+
+\captionsetup[bi-first]{bi-first}
+\captionsetup[bi-second]{bi-second}
+\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
+\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
+
+
+% 表格字号、行距
+\BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
+\BeforeBeginEnvironment{tabular*}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:13:53
+\BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:20:11
+\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 threeparttable fontsize
+% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
 
 % 页面设置
 \RequirePackage{geometry}
@@ -228,8 +408,8 @@
     nomarginpar,
     ignoreall,
     showcrop,
-    % showframe, % 展示边框，暂不查看 2021-05-26
-}   
+    % showframe, % 2021-05-26
+}	
 
 \newcommand{\XAUAT@define@fontsize}[2]{%
     \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
@@ -254,7 +434,8 @@
 \XAUAT@define@fontsize{qihao}{5.5bp}
 \XAUAT@define@fontsize{bahao}{5bp}
 
-% 页眉页脚
+% fancyhdr
+\RequirePackage{fancyhdr}
 \fancypagestyle{XAUAT@empty}{%
     \fancyhf{}
     \renewcommand{\headrulewidth}{0pt}
@@ -266,15 +447,9 @@
     \fancyhead[CO]{\songti\xiaosi[1.0]\leftmark}
     \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
     \fancyfoot[RO,LE]{\songti\wuhao[1.0]\thepage}    
-    \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % 页眉线，参https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
+    \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % headrule, reference: https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
     \renewcommand{\footrulewidth}{0pt}
 }
-
-% \fancypagestyle{mylandscape}{ % 2021-08-01
-%     \fancyhf{} %Clears the header/footer
-%     \renewcommand{\headrule}{\hrule height 1.2pt \vspace{0.6mm}\hrule height 0.25pt} % 页眉线，参https://tex.stackexchange.com/questions/89569/custom-header-footer-rules-fancyhdr
-%     \renewcommand{\footrulewidth}{0pt}
-% }
 
 \renewcommand\frontmatter{%
     \cleardoublepage
@@ -289,6 +464,7 @@
     \pagenumbering{arabic}
     \pagestyle{XAUAT@headings}
     \renewcommand\thesubsubsection{（\arabic{subsubsection}）}
+    \renewcommand\theparagraph{\Roman{paragraph}} % set paragraph label as Roman
 }
 
 \renewcommand\backmatter{%
@@ -296,12 +472,14 @@
     \@mainmattertrue
 }
 
-% 脚注
+% footmisc
 \RequirePackage[perpage,hang,bottom]{footmisc} % 2021-11-16 21-37-44
+\footnotemargin 0.5em\relax
 \renewcommand{\footnoterule}{\vskip-3\p@\hrule\@width0.3\textwidth\@height0.4\p@\vskip2.6\p@}
 \let\XAUAT@footnotesize\footnotesize
 \renewcommand\footnotesize{\XAUAT@footnotesize\xiaowu}
-\footnotemargin 0.5em\relax
+% \renewcommand{\thefootnote}{\arabic{footnote}.~} % 2022-06-09 10:25:55 Adding dot after numbering
+
 
 % 标记样式
 \let\XAUAT@makefnmark\@makefnmark
@@ -310,73 +488,11 @@
 \apptocmd{\@makefntext}{\let\@makefnmark\XAUAT@makefnmark}{}{}
 
 \renewcommand{\normalsize}{\fontsize{12pt}{22bp}\selectfont}
-\abovedisplayskip=0pt \@plus 2bp \@minus 2bp
-\abovedisplayshortskip=0bp \@plus 2bp \@minus 2bp
-\belowdisplayskip=10pt \@plus 2bp \@minus 2bp
-\belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
-\setlength\jot{27pt}
-
-% 允许太长的公式断行、分页等。
-\allowdisplaybreaks[4]
-\renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
-
-% 确定浮动对象的位置
-\RequirePackage{float} % 2021-11-17 16:25:47
-
-% 浮动体距离
-\setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
-\setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
-% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}s
-\setlength{\@fptop}{0pt \@plus 1fil}
-\setlength{\@fpsep}{12pt \@plus 2fil}
-\setlength{\@fpbot}{0pt \@plus 1fil}
-\renewcommand{\topfraction}{0.7}
-\renewcommand{\bottomfraction}{0.3}
-\renewcommand{\textfraction}{0.2}
-\renewcommand{\floatpagefraction}{0.5}
-
-% 浮动图形和表格标题样式
-\DeclareCaptionLabelFormat{XAUAT}{\wuhao[1.5]\normalfont #1~#2}
-\DeclareCaptionLabelSeparator{XAUAT}{\hspace{1em}}
-\DeclareCaptionFont{XAUAT}{\wuhao[1.5]}
-\captionsetup{labelformat=XAUAT,labelsep=XAUAT,font=XAUAT}
-% \captionsetup[sub]{font=XAUAT,skip=6bp}
-\captionsetup{justification=centering} % 2021-11-25 10:43:45
-
-% bicaption
-\RequirePackage[list=off]{bicaption}
-\captionsetup{bi-lang=both}
-\DeclareCaptionOption{bi-first}[format=hang,hangindent=-0.5em]{}
-\DeclareCaptionOption{bi-second}[format=hang,hangindent=-2em]{
-    \def\tablename{Table}
-    \def\figurename{Fig.}
-}
-
-\captionsetup[bi-first]{bi-first}
-\captionsetup[bi-second]{bi-second}
-% \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=3bp}
-% \captionsetup[figure]{position=bottom,belowskip={6bp-\intextsep},aboveskip=3bp}
-\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
-\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
-
-% subfig 间距设定
-\captionsetup[subfloat]{captionskip=0pt,farskip=0pt}
-
-% \renewcommand{\thesubfigure}{(\alph{subfigure})}
-% \renewcommand{\thesubtable}{(\alph{subtable})}
-
-% lscape 2021-07-31 landscape 
-\RequirePackage{pdflscape}
-
-% rotating 2021-08-01
-\RequirePackage{rotating}
-
-% % typearea 2021-08-01
-% \RequirePackage{typearea}
-
-
-
-
+% \abovedisplayskip=0pt \@plus 2bp \@minus 2bp
+% \abovedisplayshortskip=0bp \@plus 2bp \@minus 2bp
+% \belowdisplayskip=10pt \@plus 2bp \@minus 2bp
+% \belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
+\setlength\jot{10pt}
 
 
 \let\XAUAT@LT@array\LT@array
@@ -386,9 +502,6 @@
     \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
     \reserved@a\@xhline
 }
-
-
-
 
 % ctexset
 \ctexset{%
@@ -436,13 +549,11 @@
     linestretch=\ccwd,
 }
 
-% 表格字号、行距
-\BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
-\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 解决threeparttable字号问题
-% \BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-09
-% \BeforeBeginEnvironment{longtable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
-% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
-
+% change paragraph style
+\RequirePackage[indentafter]{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}{\xiaosi[1.3]\songti\bfseries}{\theparagraph}{1ex}{}
+\titlespacing*{\paragraph}{2em}{6bp}{0bp}
 
 \newcounter{XAUAT@bookmark}
 \NewDocumentCommand\XAUAT@chapter{s o m o}{%
@@ -459,9 +570,6 @@
         }
         { % 第二个参数有，且不为空，则将其加入目录
             \addcontentsline{toc}{chapter}{#3}
-            % NOTE: The hyperref package dislikes authors using \addcontentsline. To get
-            % it to work properly with hyperref you normally have to put \phantomsection (a
-            % macro dened within the hyperref package) immediately before \addcontentsline.
         }
     }
     { % 若没有指定该参数（即#2=-NoValue-），表示目录出现title
@@ -749,7 +857,9 @@
     \ifthenelse{\equal{\XAUAT@efunds}{}}{}
     {
         \noindent
+        \edef\prevhbadness{\the\hbadness}\hbadness=2600 % might occur underfull warning, increase the hbadness to 2600
         \parbox[c]{\linewidth}{\hangindent 1em\bfseries$\ast$\hspace{0.5em}\XAUAT@efunds}
+        \hbadness=\prevhbadness\relax % recover previous hbadness
     }
 }
 
@@ -777,7 +887,7 @@
 }
 
 \setcounter{tocdepth}{2}
-\setcounter{secnumdepth}{3}
+% \setcounter{secnumdepth}{4}
 
 \RequirePackage{titletoc}
 \contentsmargin{1.5em}
