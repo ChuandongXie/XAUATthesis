@@ -165,6 +165,7 @@
 
 % tabularray % 2022-09-16 20:42:59
 \RequirePackage{tabularray}
+\UseTblrLibrary{booktabs} % use library
 
 % multirow
 \RequirePackage{multirow}
@@ -300,7 +301,7 @@
     pdfborder=0 0 0,
 }
 \pdfstringdefDisableCommands{\def\cite#1{#1}} % 2022-06-07 Remove warning: token not allowed in a pdf string
-\RequirePackage{layouts} % TEMP
+
 \usepackage{cleveref} % 2021-07-20
 % Simplified Chinese: https://gist.github.com/anamewing/5154b6278f63e8d738bb5d57413a923f
 \crefname{table}{表}{表}

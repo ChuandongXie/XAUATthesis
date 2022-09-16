@@ -38,7 +38,8 @@ v1.0.0
 ## 更新说明
 
 ### v1.0.1
-* 2022-09-16 引入tabularray包
+* 2022-09-16 use *tabularray* package
+* 2022-09-16 Remove *layout* package
 ### v1.0.0
 * 2021-05-26 修复threeparttable字号问题;
 * 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script"
