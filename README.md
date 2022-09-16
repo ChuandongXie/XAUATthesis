@@ -36,6 +36,10 @@ v1.0.0
 * 关于选项中的保密选项，声明页的文本会`自动调整`。
 
 ## 更新说明
+
+### v1.0.1
+* 2022-09-16 引入tabularray包
+### v1.0.0
 * 2021-05-26 修复threeparttable字号问题;
 * 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script"
 * 2021-07-20 引入cleveref包

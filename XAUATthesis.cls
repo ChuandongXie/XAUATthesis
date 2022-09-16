@@ -163,8 +163,8 @@
 \RequirePackage{tabularx}
 \newcolumntype{Y}{>{\centering\arraybackslash}X} % https://tex.stackexchange.com/questions/89166/centering-in-tabularx-and-x-columns
 
-% tabulary % 2022-09-16 09:42:45
-\RequirePackage{tabulary}
+% tabularray % 2022-09-16 20:42:59
+\RequirePackage{tabularray}
 
 % multirow
 \RequirePackage{multirow}
@@ -386,14 +386,14 @@
 \captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
 
 
-% 表格字号、行距
+% font size
 \BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
 \BeforeBeginEnvironment{tabular*}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:13:53
 \BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:20:11
 \BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 threeparttable fontsize
-% \BeforeBeginEnvironment{itemize}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-07-12
+\BeforeBeginEnvironment{tblr}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-09-16 20:51:54 fontsize
 
-% 页面设置
+% Page setup
 \RequirePackage{geometry}
 \geometry{%
     twoside,
