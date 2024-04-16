@@ -1,49 +1,52 @@
-\documentclass[degree=doctor,secret=one,bibtype=numeric,electronic]{XAUATthesis}
+\documentclass[degree=doctor,degreetype=academic,secret=none,bibtype=numeric,electronic]{XAUATthesis}
 % 选项：
 % degree=[master|doctor],               % 必选，硕士|博士
+% degreetype=[academic|engineering]    % 必选，学术学位|专业学位
 % secret=[none|one|two|three],          % 必选，公开|保密1年|保密2年|保密3年
 % bibtype=[numeric|authoryear],         % 可选，默认为数字型引用
-% electronic,                           % 可选，电子版（打印时删除）
-% pifootnote,                           % 可选，脚注标记中使用 \pkg{pifont} 的带圈数字，默认已打开
+
 \usepackage{XAUATutils}
-% 文献引用
+% References
 \addbibresource{ref/refs.bib}
 
-\begin{document}
 
+\begin{document}
 \frontmatter
 \input{data/cover}
 \makecover
+{
+\hypersetup{linkcolor=black}
 \tableofcontents
+}
 \begin{denotation}
     \input{data/denotation}
 \end{denotation}
-\listoffigures
-\listoftables
+% \listoffigures
+% \listoftables
 
 \mainmatter
 \include{data/chap01}
 \include{data/chap02}
 
-\backmatter
-% 参考文献
+
+\backmatter 
+% print references
 \printXAUATbibliography
 
-% 附录
+% Print appendix
 \begin{appendix}
     \input{data/appendix}
 \end{appendix}
 
-% 个人简历
+% Resume
 \begin{resume}
     \input{data/resume}
 \end{resume}
 
-% 致谢
+% Acknowledge
 \begin{acknowledgement}
     \input{data/ack}
 \end{acknowledgement}
 
-% 书脊
-\shuji
+
 \end{document}
