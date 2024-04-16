@@ -26,6 +26,15 @@
     \expandafter\csname XAUAT@#1true\endcsname
 }
 
+% 学位类型
+\newif\ifXAUAT@academic
+\newif\ifXAUAT@engineering
+\define@key{XAUAT}{degreetype}{%
+    \XAUAT@academicfalse
+    \XAUAT@engineeringfalse
+    \expandafter\csname XAUAT@#1true\endcsname
+}
+
 % 保密
 \newif\ifXAUAT@none
 \newif\ifXAUAT@one
@@ -50,11 +59,7 @@
 }
 
 \DeclareBoolOption{electronic}
-% \DeclareBoolOption{pifootnote}  % 脚注标记中使用 \pkg{pifont} 的带圈数字
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
-% \kvsetkeys{XAUAT}{%
-%     pifootnote,
-% }
 
 \PassOptionsToPackage{AutoFakeBold=2.17,AutoFakeSlant=true}{xeCJK}
 
@@ -69,6 +74,15 @@
         \ClassError{XAUATthesis}%
                     {Please specify thesis degree in option: \MessageBreak
                     degree=[master | doctor]}{}      
+    \fi
+\fi
+
+% 强制指定degreetype
+\ifXAUAT@academic\relax\else
+    \ifXAUAT@engineering\relax\else
+        \ClassError{XAUATthesis}%
+                    {Please specify the type of degree in option: \MessageBreak
+                    degreetype=[academic | engineering]}{}      
     \fi
 \fi
 
@@ -94,7 +108,7 @@
 % ------------------------------------------------------------------------------
 % package loading
 % ------------------------------------------------------------------------------
-\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright,fontset=windows]{ctexbook}
+\LoadClass[a4paper,UTF8,scheme=plain,zihao=-4,openright]{ctexbook}
 % \ctexset{fontset=windows} % 2021-05-26 solve warning "Font FandolSong-Regular does not contain requested(fontspec) Script" // fontset=none
 
 % biblatex
@@ -106,12 +120,12 @@
     \fi
 \fi
 
+% 
+\DeclareDelimFormat[cite,parencite,textcite,citeauthor*]{andothersdelim}{} % 2023-09-04 https://github.com/hushidong/biblatex-gb7714-2015/issues/151
+
 % % AmSTeX
 \RequirePackage{amssymb}
 \RequirePackage{mathtools}
-% allow equation break
-% \allowdisplaybreaks[4]
-% \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter.\fi\@arabic\c@equation}
 
 % New TX font
 \RequirePackage{newtxtext}
@@ -128,7 +142,7 @@
 \RequirePackage{caption}
 
 % subcaption
-\RequirePackage{subcaption} % 2022-01-02 09:20:41
+\RequirePackage{subfig}
 
 % insert pdf pages
 \RequirePackage{pdfpages}
@@ -156,137 +170,18 @@
 % longtable
 \RequirePackage{longtable}
 
-% threeparttable
-\RequirePackage{threeparttable}
-
-% tabularx % 2022-07-17 12:05:41
-\RequirePackage{tabularx}
-\newcolumntype{Y}{>{\centering\arraybackslash}X} % https://tex.stackexchange.com/questions/89166/centering-in-tabularx-and-x-columns
-
 % tabularray % 2022-09-16 20:42:59
-\RequirePackage{tabularray}
+\RequirePackage{tabularray} % tblr
 \UseTblrLibrary{booktabs} % use library
 
 % multirow
 \RequirePackage{multirow}
 
-% wrapfigure - wrapping text around figures
-\RequirePackage{wrapfig}
-
-% slashbox in table
-% \RequirePackage{slashbox}
-
-% tabincell command
-\newcommand{\tabincell}[2]{
-  \begin{tabular}{@{}#1@{}}#2\end{tabular}
-}
-
-% Equation 2022-06-07
-\RequirePackage{empheq}
-
-% Underline break 2022-06-08
-\RequirePackage{soul}
-% Underline break for Chinese 2022-06-10
-\RequirePackage{ulem}
-
 % tikz
 \RequirePackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows}
-\usetikzlibrary{fit}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{positioning}
-\usetikzlibrary{calc}
-\usetikzlibrary{bending}
-%% \spiral -- https://tex.stackexchange.com/questions/29147/spiral-spring-in-tikz
-\newif\ifspiral@is@clockwise
-  \pgfkeys{
-    spiral/.is family,
-    spiral,
-    start angle/.initial=0,
-    end angle/.initial=0,
-    start radius/.initial=0,
-    end radius/.initial=1,
-    revolutions/.initial=2,
-    name/.initial=,
-    center/.initial={(0,0)},
-    sample rate/.initial =5,
-    clockwise spiral/.is if=spiral@is@clockwise,
-    clockwise spiral/.default=false,
-    clockwise/.style={clockwise spiral=true},
-    default spiral/.style={start angle=0,end angle=0, start radius=0, end radius=1, revolutions=2, name=, center={(0,0)}, sample rate=5, clockwise spiral=false}
-  }
-  \newcommand\spiral[2][]{
-    \pgfkeys{spiral, default spiral,#2,
-      start angle/.get=\spiral@start@angle,
-      end angle/.get=\spiral@end@angle,
-      start radius/.get=\spiral@start@radius,
-      end radius/.get=\spiral@end@radius,
-      revolutions/.get=\spiral@revolutions,
-      name/.get=\spiral@name,
-      sample rate/.get=\spiral@sample@rate,
-      center/.get=\spiral@center
-      }
-  \def\spiral@start@name{}
-  \def\spiral@end@name{}
-  \ifspiral@is@clockwise
-        \renewcommand*{\spiral@start@angle}{\pgfkeysvalueof{/spiral/end angle}}
-        \renewcommand*{\spiral@end@angle}{\pgfkeysvalueof{/spiral/start angle}}
-        \renewcommand*{\spiral@start@radius}{\pgfkeysvalueof{/spiral/end radius}}
-        \renewcommand*{\spiral@end@radius}{\pgfkeysvalueof{/spiral/start radius}}
-        \if\relax\detokenize{\spiral@name}\relax
-        \else
-          \renewcommand*{\spiral@start@name}{\spiral@name end}
-          \renewcommand*{\spiral@end@name}{\spiral@name start}
-        \fi
-    \else
-        \if\relax\detokenize{\spiral@name}\relax
-        \else
-          \renewcommand*{\spiral@start@name}{\spiral@name start}
-          \renewcommand*{\spiral@end@name}{\spiral@name end}
-        \fi
-  \fi
-  \pgfmathsetmacro{\spiral@domain}{\spiral@end@angle+\spiral@revolutions*360}
-  \pgfmathsetmacro{\spiral@growth}{180*(\spiral@end@radius-\spiral@start@radius)/(pi*(\spiral@domain-\spiral@start@angle))}
-  \draw [#1,
-         shift={\spiral@center},
-         domain=\spiral@start@angle*pi/180:\spiral@domain*pi/180,
-         variable=\t,
-         smooth,
-         samples=int(\spiral@domain/\spiral@sample@rate)] node[coordinate,shift={(\spiral@start@angle:\spiral@start@radius)}](\spiral@start@name){} plot ({\t r}: {\spiral@start@radius+\spiral@growth*\t-\spiral@growth*\spiral@start@angle*pi/180}) node[coordinate](\spiral@end@name){}
-  }
-
-% use tikz-imagelabels
-\RequirePackage{tikz-imagelabels}
-\imagelabelset{
-  coarse grid color = red,
-  fine grid color = gray,
-  image label font = \sffamily\bfseries\small,
-  image label distance = 2mm,
-  image label back = black,
-  image label text = white,
-  coordinate label font = \sffamily\bfseries\scriptsize,
-  coordinate label distance = 2mm,
-  coordinate label back = black,
-  coordinate label text = white,
-  annotation font = \normalfont\xiaowu,
-  arrow distance = 1.5mm,
-  border thickness = 0.6pt,
-  arrow thickness = 0.4pt,
-  tip size = 1.2mm,
-  outer dist = 0.5cm,
-}
-
-% Latex 3 new command
-\RequirePackage{xparse}
 
 % setspace
 \RequirePackage{setspace}
-
-% lscape 2021-07-31 landscape 
-\RequirePackage{pdflscape}
-
-% rotating 2021-08-01
-\RequirePackage{rotating}
 
 % hyperref
 \RequirePackage{hyperref}
@@ -299,11 +194,11 @@
     colorlinks=true, % 2021-05-26 true,方便查看
     plainpages=false,
     pdfborder=0 0 0,
+    citecolor=blue, % 2024-03-11
 }
 \pdfstringdefDisableCommands{\def\cite#1{#1}} % 2022-06-07 Remove warning: token not allowed in a pdf string
 
 \usepackage{cleveref} % 2021-07-20
-% Simplified Chinese: https://gist.github.com/anamewing/5154b6278f63e8d738bb5d57413a923f
 \crefname{table}{表}{表}
 \crefname{figure}{图}{图}
 \crefname{equation}{式}{式}
@@ -342,28 +237,24 @@
 \newcommand{\crefpairgroupconjunction}{~和~}
 \newcommand{\crefmiddlegroupconjunction}{，}
 \newcommand{\creflastgroupconjunction}{~和~}
-\newcommand{\crefrangeconjunction}{~至~}
-
-% url style, same as the context
-\urlstyle{same}
+% \newcommand{\crefrangeconjunction}{~至~} % 2023-09-16
+\newcommand{\crefrangeconjunction}{~$\sim$~}
 
 % 确定浮动对象的位置
 \RequirePackage{float} % 2021-11-17 16:25:47
 
 % 浮动体距离
-% \setlength{\floatsep}{12pt \@plus 2pt \@minus 2pt}
-% \setlength{\textfloatsep}{12pt \@plus 2pt \@minus 4pt}
-% \setlength{\intextsep}{12pt \@plus 2pt \@minus 2pt}
-\setlength{\floatsep}{2pt \@plus 2pt \@minus 2pt}
-\setlength{\textfloatsep}{2pt \@plus 2pt \@minus 2pt}
-\setlength{\intextsep}{2pt \@plus 2pt \@minus 2pt}
-\setlength{\@fptop}{0pt \@plus 1fil}
-\setlength{\@fpsep}{12pt \@plus 2fil}
-\setlength{\@fpbot}{0pt \@plus 1fil}
-\renewcommand{\topfraction}{0.7}
+\setlength{\floatsep}{0pt \@plus 2pt \@minus 2pt}
+\setlength{\textfloatsep}{10pt \@plus 2pt \@minus 2pt}
+\setlength{\intextsep}{10pt \@plus 2pt \@minus 2pt}
+\setlength{\abovedisplayskip}{2pt \@plus 1pt \@minus 1pt}
+\setlength{\abovedisplayshortskip}{2pt \@plus 1pt \@minus 1pt}
+\setlength{\belowdisplayskip}{2pt \@plus 1pt \@minus 1pt}
+\setlength{\belowdisplayshortskip}{2pt \@plus 1pt \@minus 1pt}
+\renewcommand{\topfraction}{0.8}
 \renewcommand{\bottomfraction}{0.3}
 \renewcommand{\textfraction}{0.2}
-\renewcommand{\floatpagefraction}{0.5}
+\renewcommand{\floatpagefraction}{0.85} % 2023-08-26
 
 % 浮动图形和表格标题样式
 \DeclareCaptionLabelFormat{XAUAT}{\wuhao[1.5]\normalfont #1~#2}
@@ -383,16 +274,16 @@
 
 \captionsetup[bi-first]{bi-first}
 \captionsetup[bi-second]{bi-second}
-\captionsetup[table]{position=top,belowskip={12bp},aboveskip=3bp}
-\captionsetup[figure]{position=bottom,belowskip={6bp},aboveskip=3bp}
+\captionsetup[table]{position=top,belowskip={12bp},aboveskip=0bp}
+\captionsetup[figure]{position=bottom,belowskip={0bp},aboveskip=0bp}
+\captionsetup[figure]{farskip=0pt}
 
 
 % font size
 \BeforeBeginEnvironment{tabular}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}}
 \BeforeBeginEnvironment{tabular*}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:13:53
-\BeforeBeginEnvironment{tabularx}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-07-17 12:20:11
-\BeforeBeginEnvironment{threeparttable}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2021-05-26 threeparttable fontsize
 \BeforeBeginEnvironment{tblr}{\xiaowu[1.3]\renewcommand\arraystretch{1.3}} % 2022-09-16 20:51:54 fontsize
+
 
 % Page setup
 \RequirePackage{geometry}
@@ -416,24 +307,24 @@
     \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
         \fontsize{#2}{##1\dimexpr #2}\selectfont}
 }
-\XAUAT@define@fontsize{chuhao}{42bp}
-\XAUAT@define@fontsize{xiaochu}{36bp}
-\XAUAT@define@fontsize{yihao}{26bp}
-\XAUAT@define@fontsize{xiaoyi}{24bp}
-\XAUAT@define@fontsize{erhao}{22bp}
-\XAUAT@define@fontsize{xiaoer}{18bp}
-\XAUAT@define@fontsize{sanhao}{16bp}
-\XAUAT@define@fontsize{xiaosan}{15bp}
-\XAUAT@define@fontsize{sihao}{14bp}
-\XAUAT@define@fontsize{banxiaosi}{13bp}
-\XAUAT@define@fontsize{xiaosi}{12bp}
-\XAUAT@define@fontsize{dawu}{11bp}
-\XAUAT@define@fontsize{wuhao}{10.5bp}
-\XAUAT@define@fontsize{xiaowu}{9bp}
-\XAUAT@define@fontsize{liuhao}{7.5bp}
-\XAUAT@define@fontsize{xiaoliu}{6.5bp}
-\XAUAT@define@fontsize{qihao}{5.5bp}
-\XAUAT@define@fontsize{bahao}{5bp}
+\XAUAT@define@fontsize{chuhao}{42pt}
+\XAUAT@define@fontsize{xiaochu}{36pt}
+\XAUAT@define@fontsize{yihao}{26pt}
+\XAUAT@define@fontsize{xiaoyi}{24pt}
+\XAUAT@define@fontsize{erhao}{22pt}
+\XAUAT@define@fontsize{xiaoer}{18pt}
+\XAUAT@define@fontsize{sanhao}{16pt}
+\XAUAT@define@fontsize{xiaosan}{15pt}
+\XAUAT@define@fontsize{sihao}{14pt}
+\XAUAT@define@fontsize{banxiaosi}{13pt}
+\XAUAT@define@fontsize{xiaosi}{12pt}
+\XAUAT@define@fontsize{dawu}{11pt}
+\XAUAT@define@fontsize{wuhao}{10.5pt}
+\XAUAT@define@fontsize{xiaowu}{9pt}
+\XAUAT@define@fontsize{liuhao}{7.5pt}
+\XAUAT@define@fontsize{xiaoliu}{6.5pt}
+\XAUAT@define@fontsize{qihao}{5.5pt}
+\XAUAT@define@fontsize{bahao}{5pt}
 
 % fancyhdr
 \RequirePackage{fancyhdr}
@@ -482,6 +373,32 @@
 % \renewcommand{\thefootnote}{\arabic{footnote}.~} % 2022-06-09 10:25:55 Adding dot after numbering
 
 
+% enumerate footnotes with circled numbers % 2023-09-09 https://tex.stackexchange.com/questions/639370/how-to-enumerate-footnotes-with-circled-numbers
+\tikzset{circlednode/.style={
+    circle,
+    draw,
+    inner sep=0.05ex,
+    text depth=0ex,
+    font=\normalfont,
+    minimum size=1ex
+    }
+}
+\newcommand*\circled[1]{%
+    \ifnumcomp{#1}{>}{9}{% 
+    % if > 9:
+    \tikz[baseline=(char.base)]\node[circlednode] (char) {\addfontfeature{LetterSpace=-9.0}\scalebox{0.5}[1]{\bfseries#1}};}{%
+    % if <= 9: 
+    \tikz[baseline=(char.base)]\node[circlednode] (char) {#1};}%
+}
+\renewcommand{\thefootnote}{%
+    \raisebox{0.75ex}{%
+    \scalebox{0.7}{\protect\circled{%
+            \arabic{footnote}}%
+        }%
+    }%
+}
+
+
 % 标记样式
 \let\XAUAT@makefnmark\@makefnmark
 \newcommand{\XAUAT@@makefnmark}{\hbox{{\normalfont\@thefnmark}}}
@@ -489,10 +406,6 @@
 \apptocmd{\@makefntext}{\let\@makefnmark\XAUAT@makefnmark}{}{}
 
 \renewcommand{\normalsize}{\fontsize{12pt}{22bp}\selectfont}
-% \abovedisplayskip=0pt \@plus 2bp \@minus 2bp
-% \abovedisplayshortskip=0bp \@plus 2bp \@minus 2bp
-% \belowdisplayskip=10pt \@plus 2bp \@minus 2bp
-% \belowdisplayshortskip=10bp \@plus 2bp \@minus 2bp
 \setlength\jot{10pt}
 
 
@@ -509,28 +422,28 @@
     chapter={%
         afterindent=true,
         pagestyle=XAUAT@headings,
-        beforeskip=20.75bp \@plus 1ex \@minus .2ex,
+        beforeskip=0pt,%20.75bp \@plus 1ex \@minus .2ex,
         aftername=\hskip\ccwd,
-        afterskip=20.75bp \@plus .2ex,
+        afterskip=10pt,%20.75bp \@plus .2ex,
         format=\centering,
-        nameformat=\sanhao[1.0]\heiti,
+        nameformat=\sanhao[1.5]\heiti,
         numberformat=\relax,
-        titleformat=\sanhao[1.0]\heiti,
+        titleformat=\sanhao[1.5]\heiti,
         lofskip=0pt,
         lotskip=0pt,
     },
     section={%
         afterindent=true,
-        beforeskip=9bp \@plus 1ex \@minus .2ex,
-        afterskip=9bp \@plus .2ex,
+        beforeskip=7pt,% \@plus 1ex \@minus .2ex,
+        afterskip=2pt,% \@plus .2ex,
         aftername=\hskip\ccwd,
         format=\sihao[1.3]\heiti
 
     },
     subsection={%
         afterindent=true,           
-        beforeskip=7.7bp \@plus 1ex \@minus .2ex,
-        afterskip=7.7bp \@plus .2ex,
+        beforeskip=6pt,% \@plus 1ex \@minus .2ex,
+        afterskip=0pt,% \@plus .2ex,
         aftername=\hskip\ccwd,
         format=\xiaosi[1.3]\songti\bfseries
     },
@@ -539,8 +452,8 @@
         afterindent=true,
         % beforeskip=7.7bp \@plus 1ex \@minus .2ex,
         % afterskip=7.7bp \@plus .2ex,
-        beforeskip=6bp,
-        afterskip=0bp,
+        beforeskip=6pt,
+        afterskip=0pt,
         format=\xiaosi[1.3]\songti\bfseries,
         indent=2\ccwd, % 2021-11-16 22:00:32
     },
@@ -555,6 +468,7 @@
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph}{\xiaosi[1.3]\songti\bfseries}{\theparagraph}{1ex}{}
 \titlespacing*{\paragraph}{2em}{6bp}{0bp}
+
 
 \newcounter{XAUAT@bookmark}
 \NewDocumentCommand\XAUAT@chapter{s o m o}{%
@@ -603,6 +517,9 @@
     }
 }
 
+\RequirePackage{bm} % 2023-07-23
+
+
 % ------------------------------------------------------------------------------
 % main code
 % ------------------------------------------------------------------------------
@@ -628,11 +545,16 @@
 \XAUAT@def@term{csupervisor}
 \XAUAT@def@term{esupervisor}
 
-% 学位类别中英文
+% 学位中英文
 \XAUAT@def@term{cdegree}
 \XAUAT@def@term{edegree}
 
+% 学位类别中英文
+\XAUAT@def@term{cdegreetype}
+\XAUAT@def@term{edegreetype}
+
 % 院系中英文名称
+\XAUAT@def@term{cdepartment}
 \XAUAT@def@term{edepartment}
 
 % 专业中英文名称
@@ -640,11 +562,9 @@
 \XAUAT@def@term{emajor}
 
 % 论文成文日期
-\XAUAT@def@term{csubmitdate}
 \XAUAT@def@term{cdefencedate}
 \XAUAT@def@term{edefencedate}
 
-% 定义基金支持
 % 定义基金支持
 \XAUAT@def@term{cfunds}
 \XAUAT@def@term{efunds}
@@ -653,72 +573,155 @@
 \XAUAT@def@term{disciplineclassification}
 \XAUAT@def@term{studentnumber}
 
+% 论文类型
+\XAUAT@def@term{cthesistype}
+\XAUAT@def@term{ethesistype}
+
+% 委员会
+\XAUAT@def@term{committeeChairName}
+\XAUAT@def@term{committeeChairTitle}
+\XAUAT@def@term{committeeChairOri}
+\XAUAT@def@term{committeeOneName}
+\XAUAT@def@term{committeeOneTitle}
+\XAUAT@def@term{committeeOneOri}
+\XAUAT@def@term{committeeTwoName}
+\XAUAT@def@term{committeeTwoTitle}
+\XAUAT@def@term{committeeTwoOri}
+\XAUAT@def@term{committeeThreeName}
+\XAUAT@def@term{committeeThreeTitle}
+\XAUAT@def@term{committeeThreeOri}
+\XAUAT@def@term{committeeFourName}
+\XAUAT@def@term{committeeFourTitle}
+\XAUAT@def@term{committeeFourOri}
+\XAUAT@def@term{committeeFiveName}
+\XAUAT@def@term{committeeFiveTitle}
+\XAUAT@def@term{committeeFiveOri}
+\XAUAT@def@term{committeeSixName}
+\XAUAT@def@term{committeeSixTitle}
+\XAUAT@def@term{committeeSixOri}
+
 \newcommand{\XAUATsetup}{\kvsetkeys{XAUAT}}
 \RequirePackage{xeCJKfntef}
 \newcommand{\XAUAT@underline}[2]{\CJKunderline{\hbox to #1{\hfill{#2}\hfill}}}
+
+%华文行楷
+\setCJKfamilyfont{stxingkai}{STXINGKA.TTF}
+\newcommand{\stxingkai}{\CJKfamily{stxingkai}}
+
+% 方正小标宋
+\setCJKfamilyfont{fzxbsjw}{FZXBSJW.TTF}
+\newcommand{\fzxbsjw}{\CJKfamily{fzxbsjw}}
+
 %封面粗体字
 \newcommand{\XAUAT@cover@font}{%
-  \heiti\sanhao\bfseries}
+  \heiti\xiaosan}
 
 %封面字段
 \newcommand{\XAUAT@coverkey@font}{%
-  \kaishu\sanhao}
-
-%华文行楷
-\setCJKfamilyfont{stxingka}{STXINGKA.TTF}
-\newcommand{\stxingkai}{\CJKfamily{stxingka}}
-
+  \heiti\xiaosan}
 
 % 封面第一页
 \newcommand{\XAUAT@first@titlepage}
 {
-    \newgeometry{bindingoffset=0mm,
-                left=2cm,
-                right=2cm,}
-    \ifXAUAT@electronic{{\kaishu\xiaosi\bfseries\itshape（打印时删除）}}
-    \centering
-    \begin{tabular}{r@{}lp{5cm}<{\centering}r@{}l}
-        \XAUAT@cover@font\XAUAT@classification &
-        \XAUAT@underline{10em}{\XAUAT@coverkey@font\XAUAT@disciplineclassification}&&
-        \XAUAT@cover@font\XAUAT@cstudentnumbertitle&
-        \XAUAT@underline{10em}{\XAUAT@coverkey@font\XAUAT@studentnumber}
-    \end{tabular}
+    % define color
+    \definecolor{ColA}{cmyk}{0.05,0.07,0.09,0.00}
+    \definecolor{ColB}{cmyk}{0.41,0.60,0.84,0.01}
 
-    \vskip 54pt
-    \parbox[c]{\textwidth}{\xiaochu[1]\stxingkai\centering\XAUAT@cschoolname}\\
-    \vskip 18pt
-    \parbox[c]{\textwidth}{\chuhao[1]\bfseries\heiti\centering\XAUAT@thesistitle}\\
-    \vskip 54pt
+    % newgeometry
+    \newgeometry{margin=0mm} % bindingoffset=0mm, left=2cm, right=2cm,
 
-    \begin{spacing}{2.0}
-    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{20em}{\XAUAT@ctitlefirst}}
-    \parbox[c]{\textwidth}{\centering\sanhao\bfseries\kaishu\XAUAT@underline{20em}{\XAUAT@ctitlesecond}}
-    \vskip 54pt
+    % tikz
+    \begin{tikzpicture}[remember picture,overlay, shift={(current page.south west)}]
+        % background
+        \fill[ColA] rectangle(\paperwidth,\paperheight);
+        \fill[ColB] (0.0,0.0) rectangle (20mm,\paperheight);
 
-    \begin{tabular}{r@{}l}
-        \XAUAT@cover@font{\XAUAT@cauthortitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@cauthor}\\
-        \XAUAT@cover@font{\XAUAT@csupervisortitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@csupervisor}
-    \end{tabular}\\
-    \begin{tabular}{r@{}l}
-        \XAUAT@cover@font{\XAUAT@cdegreetitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@cdegree}\\
-        \XAUAT@cover@font{\XAUAT@csubmitdatetitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@csubmitdate}
-    \end{tabular}\hfill
-    \begin{tabular}{r@{}l}
-        \XAUAT@cover@font{\XAUAT@cmajortitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@cmajor}\\
-        \XAUAT@cover@font{\XAUAT@cdefencedatetitle}&\XAUAT@coverkey@font\XAUAT@underline{6em}{\XAUAT@cdefencedate}
-    \end{tabular}
+        % logo
+        \node at (0.5\paperwidth,0.856\paperheight) {\includegraphics[width=7.1cm]{XAUAT_logo_1.png}};
 
-    \raggedleft
-    \begin{tabular}{r@{}l}
-        \XAUAT@cover@font{\XAUAT@cschoolnametitle}&\XAUAT@underline{16em}{\sanhao\stxingkai\centering\XAUAT@cschoolname}
-    \end{tabular}
-    \begin{tabular}{r@{}l}
-        \XAUAT@cover@font{\XAUAT@defensecommittee}&\XAUAT@coverkey@font\XAUAT@underline{6em}{}\\
-        \XAUAT@cover@font{\XAUAT@reviews}&\XAUAT@coverkey@font\XAUAT@underline{6em}{}
-    \end{tabular}
-    \end{spacing}
+        % classification
+        \node at (0.84\paperwidth,0.94\paperheight) {
+            \begin{tabular}{r@{}l}
+                {\fzxbsjw\xiaosi\bfseries\XAUAT@classification} &
+                \XAUAT@underline{6em}{\sihao\XAUAT@disciplineclassification}
+            \end{tabular}
+        };
+
+        % dissertation
+        \setlength{\parindent}{0pt}
+        \node [color=ColB] at (0.5\paperwidth,0.763\paperheight) {
+            \makebox[0.57\linewidth][s]{\fzxbsjw\chuhao[1]\XAUAT@capply}
+        };
+
+        % degreetype
+        \node at (0.5\paperwidth,0.703\paperheight) {
+            \fzxbsjw\sanhao\bfseries{（\XAUAT@cdegreetype）}
+        };
+
+        % title
+        \node at (0.5\paperwidth,0.605\paperheight) {
+            \parbox[c]{\textwidth}{\centering\sanhao\heiti\XAUAT@underline{21em}{\XAUAT@ctitlefirst}}
+        };
+        \node at (0.5\paperwidth,0.564\paperheight) {
+            \parbox[c]{\textwidth}{\centering\sanhao\heiti\XAUAT@underline{21em}{\XAUAT@ctitlesecond}}
+        };
+
+        % details
+        \node at (0.5\paperwidth,0.315\paperheight) {
+            \begin{tblr}{width=0.7\paperwidth,columns={halign=c},rows={valign=m},colsep=0pt,rowsep=10pt,colspec={Q[r]Q[l]Q[l]}}
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cauthortitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cauthor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cstudentnumbertitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@studentnumber} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cdepartmenttitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cdepartment} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cmajortypetitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cmajor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@csupervisortitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@csupervisor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cdefencedatetitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cdefencedate} \\
+            \end{tblr}
+        };
+
+
+    \end{tikzpicture}
     \restoregeometry
 } % end of titlepage
+
+\newcommand{\XAUAT@second@titlepage}{% second page
+    \begin{tikzpicture}[remember picture,overlay, shift={(current page.south west)}]
+
+        % logo
+        \node at (0.5\paperwidth,0.856\paperheight) {\includegraphics[width=7.1cm]{XAUAT_logo_1.png}};
+
+        % dissertation
+        \setlength{\parindent}{0pt}
+        \node at (0.5\paperwidth,0.763\paperheight) {
+            \makebox[0.57\linewidth][s]{\fzxbsjw\chuhao[1]\XAUAT@capply}
+        };
+
+        % degreetype
+        \node at (0.5\paperwidth,0.703\paperheight) {
+            \fzxbsjw\sanhao\bfseries{（\XAUAT@cdegreetype）}
+        };
+
+        % title
+        \node at (0.5\paperwidth,0.605\paperheight) {
+            \parbox[c]{\textwidth}{\centering\sanhao\heiti\XAUAT@underline{21em}{\XAUAT@ctitlefirst}}
+        };
+        \node at (0.5\paperwidth,0.564\paperheight) {
+            \parbox[c]{\textwidth}{\centering\sanhao\heiti\XAUAT@underline{21em}{\XAUAT@ctitlesecond}}
+        };
+
+        % details
+        \node at (0.5\paperwidth,0.315\paperheight) {
+            \begin{tblr}{width=0.7\paperwidth,columns={halign=c},rows={valign=m},colsep=0pt,rowsep=10pt,colspec={Q[r]Q[l]Q[l]}}
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cauthortitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cauthor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cstudentnumbertitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@studentnumber} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cdepartmenttitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cdepartment} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cmajortypetitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cmajor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@csupervisortitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@csupervisor} \\
+                \XAUAT@cover@font\makebox[4em][s]{\XAUAT@cdefencedatetitle} & \XAUAT@cover@font{：} & \XAUAT@coverkey@font\XAUAT@underline{14em}{\XAUAT@cdefencedate} \\
+            \end{tblr}
+        };
+    \end{tikzpicture}
+    % \restoregeometry
+}
 
 \newcommand{\engcover}
 {%
@@ -728,41 +731,86 @@
         \erhao[1.3]{\bfseries\XAUAT@etitle}
         \vskip 126pt
         
-        \sihao[1.3]{\XAUAT@eapply\\\XAUAT@edegree }
-        \vskip 168pt
+        \sihao[2.0]{\XAUAT@eapply\\\XAUAT@edegree }
+        \vskip 120pt
 
-        \sihao[1.3]
-        \begin{tabular}{lp{6cm}} 
-                Candidate :         & \XAUAT@eauthor       \\
-                Student Number :    & \XAUAT@studentnumber \\
-                School/Department : & \XAUAT@edepartment   \\
-                Major :             & \XAUAT@emajor \\
-                Supervisor :        & \XAUAT@esupervisor \\
-        \end{tabular}\\
-        \vskip 36pt
-        \XAUAT@edefencedate
+        {
+        % \begin{tblr}{colspec={Q[l]Q[l]},rows={font=\xiaosi},colsep=0pt,rowsep=4pt}
+        %         Candidate:~         & \XAUAT@eauthor       \\
+        %         Student Number:~    & \XAUAT@studentnumber \\
+        %         School/Department:~ & \XAUAT@edepartment   \\
+        %         Major:~             & \XAUAT@emajor \\
+        %         Supervisor:~        & \XAUAT@esupervisor \\
+        %         Defence date:~        & \XAUAT@edefencedate \\
+        % \end{tblr}
+        \sihao[2.0]{
+            By\\
+            \XAUAT@eauthor\\
+            Supervisor:~\XAUAT@esupervisor\\
+            \XAUAT@emajor\\
+            \XAUAT@edefencedate
+        }
+        }
     \end{center}
 } % end of english cover
 
+\newcommand{\committee}{
+    \addtocounter{XAUAT@bookmark}\@ne
+    \pdfbookmark[0]{\XAUAT@committee}{XAUATchapter.\theXAUAT@bookmark}
+    \pagestyle{XAUAT@headings}
+    \fancyhf{}
+    \fancyhead[CO]{\songti\xiaosi[1.0]\XAUAT@committee}
+    \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
+    %
+    \begin{center}
+    \vspace*{1em}
+    {\heiti\erhao[1.3] \XAUAT@cdegree\XAUAT@committee}\\
+    \vspace{2cm}
+    % {\xiaoer[1.3]{\heiti\XAUAT@ctitlefirst\XAUAT@ctitlesecond}}
+    \parbox[c]{0.75\linewidth}{\heiti\xiaoer[1.5]\centering\XAUAT@ctitlefirst \XAUAT@ctitlesecond}
+    
+    \vspace{4cm}
+    
+    \begin{tblr}{colspec={|X|X|X|X[5cm]|},rows={valign=m,font=\heiti\xiaosi},columns={halign=c},stretch=2.2}
+        \hline
+        \XAUAT@defenceAuthorTitle & \SetCell[c=3]{c} \XAUAT@cauthor & & \\\hline
+        \XAUAT@defenceTimeTitle  & \SetCell[c=3]{c} \XAUAT@cdefencedate & & \\\hline
+        \XAUAT@defenceCommitteeTitle & \XAUAT@committeeNameTitle & \XAUAT@committeeTitleTitle & \XAUAT@committeeOrgTitle \\\hline
+        \XAUAT@committeeCChairTitle & \XAUAT@committeeChairName & \XAUAT@committeeChairTitle & \XAUAT@committeeChairOri\\ \hline
+        \SetCell[r=6]{m} \XAUAT@committeeTitle & \XAUAT@committeeOneName & \XAUAT@committeeOneTitle & \XAUAT@committeeOneOri \\ \hline
+         & \XAUAT@committeeTwoName & \XAUAT@committeeTwoTitle & \XAUAT@committeeTwoOri \\ \hline
+         & \XAUAT@committeeThreeName & \XAUAT@committeeThreeTitle & \XAUAT@committeeThreeOri \\ \hline
+         & \XAUAT@committeeFourName & \XAUAT@committeeFourTitle & \XAUAT@committeeFourOri \\ \hline
+         & \XAUAT@committeeFiveName & \XAUAT@committeeFiveTitle & \XAUAT@committeeFiveOri \\ \hline
+         & \XAUAT@committeeSixName & \XAUAT@committeeSixTitle & \XAUAT@committeeSixOri \\ \hline
+    \end{tblr}
+    \end{center}
+}
+
 \newcommand{\declaration}{
+    \addtocounter{XAUAT@bookmark}\@ne
+    \pdfbookmark[0]{\XAUAT@declaration}{XAUATchapter.\theXAUAT@bookmark}
+    \pagestyle{XAUAT@headings}
+    \fancyhf{}
+    \fancyhead[CO]{\songti\xiaosi[1.0]\XAUAT@declaration}
+    \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
+    %
     \normalsize
     \begin{center}  
         {\vspace*{1em}\songti\xiaoer[1]\XAUAT@declarationtitle}
         \begin{flushleft}
             {\XAUAT@declarationtext\\
             \vskip12pt
-            \hspace*{2em}\XAUAT@authorsignaturetitle \hspace*{19em}\XAUAT@datetitle}
+            \hspace*{2em}\XAUAT@authorsignaturetitle \hspace*{10em}\XAUAT@datetitle}
         \end{flushleft}
         \vskip48pt
         {\centering\songti\xiaoer\XAUAT@authorization}
         \begin{flushleft}
             {\hspace*{2em}\XAUAT@authorizationtext\\\vskip12pt
-            \hspace*{2em}\XAUAT@authorsignaturetitle \hspace*{6em}\XAUAT@supervisorsignature \hspace*{6em}\XAUAT@datetitle
+            \hspace*{2em}\XAUAT@authorsignaturetitle \hspace*{10em}\XAUAT@datetitle
             }\\\vskip12pt
-            \dotfill\\
-            \vskip12pt
-            {\hspace*{2em}\XAUAT@publishtext\\\vskip12pt
-            \hspace*{2em}\XAUAT@authorsignaturetitle\hspace*{6em}\XAUAT@supervisorsignature \hspace*{6em}\XAUAT@datetitle}
+            {
+            \hspace*{2em}\XAUAT@supervisorsignature\hspace*{10em}\XAUAT@datetitle}
         \end{flushleft}
     \end{center}
 }
@@ -788,37 +836,45 @@
 }
 \XAUAT@parse@keywords{ckeywords}
 \XAUAT@parse@keywords{ekeywords}
+
+% CN & EN
 \newcommand{\XAUAT@makeabstract}{%
     \cleardoublepage
-    \addtocounter{XAUAT@bookmark}\@ne
-    \pdfbookmark[0]{\cabstractname}{XAUATchapter.\theXAUAT@bookmark}
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\cabstractname}
+    % \addtocounter{XAUAT@bookmark}\@ne
+    % \pdfbookmark[0]{\cabstractname}{XAUATchapter.\theXAUAT@bookmark}
     \pagestyle{XAUAT@headings}
     \fancyhf{}
     \fancyhead[CO]{\songti\xiaosi[1.0]\cabstractname}
     \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
-    \vspace*{20.8pt}
-    \setCJKfamilyfont{fzxbsjw}{FZXBSJW.TTF}
+    \fancyfoot[RO,LE]{\songti\wuhao[1.0]\thepage}
+    \setcounter{page}{1}
+    
+    % \setCJKfamilyfont{fzxbsjw}{FZXBSJW.TTF}
     {\noindent\centering
-    \parbox[c]{0.75\linewidth}{\CJKfamily{fzxbsjw}\sanhao[1.3]\centering\XAUAT@ctitlefirst \XAUAT@ctitlesecond\ifthenelse{\equal{\XAUAT@cfunds}{}}{}{$^{\ast}$}}\par % 
-    \vspace{20.8pt}
-    \renewcommand{\tabcolsep}{0pt}
-    \kaishu
-    \begin{tabular}{rll}
-        \XAUAT@cmajorname                           &：&  {\hspace{1em}}\XAUAT@cmajor \\
-        {\hbadness=10000 \makebox[4em][s]{\XAUAT@cstudenttitle}}      &：&   {\hspace{1em}}\XAUAT@cauthor \\
-        \XAUAT@csupervisorname                      &：&   {\hspace{1em}}\XAUAT@csupervisor
-    \end{tabular}
-    \vspace{15.6pt} \par
+    \parbox[c]{0.9\linewidth}{\CJKfamily{fzxbsjw}\sanhao[1.5]\centering\XAUAT@ctitlefirst \\ \XAUAT@ctitlesecond\ifthenelse{\equal{\XAUAT@cfunds}{}}{}{$^{\ast}$}}\par % 
+    \vspace{9pt}
+    {
+    \centering
+    \begin{tblr}{colspec={Q[r]Q[l]Q[l]},rows={font=\xiaosi\kaishu},colsep=0pt,rowsep=4pt}
+        \XAUAT@cdegreetype@title                                       &：&  \XAUAT@cdegreetype \\
+        \XAUAT@cmajorname                                  &：& \XAUAT@cmajor
+    \end{tblr}
+    }
+    \vspace{16pt} \par
     \sanhao[1.0]\heiti\cabstractname
-    \vspace{7.8pt}
+    \vspace{8pt}
     \par
     }
     \XAUAT@cabstract
-    \par
+    \par\vspace{12pt}
     \setbox0=\hbox{{\bfseries\heiti\XAUAT@ckeywords@title}}
     \noindent\hangindent\wd0\hangafter1
     \box0\XAUAT@ckeywords
     \par
+    \vskip 9bp 
+    \hbox{{\bfseries\heiti\XAUAT@cthesistype@title}{\XAUAT@cthesistype}}
     \vskip 20bp 
     \ifthenelse{\equal{\XAUAT@cfunds}{}}{}
     {
@@ -827,33 +883,39 @@
     }
     %
     \cleardoublepage
-    \addtocounter{XAUAT@bookmark}\@ne
-    \pdfbookmark[0]{\eabstractname}{XAUATchapter.\theXAUAT@bookmark}
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\eabstractname}
+    % \addtocounter{XAUAT@bookmark}\@ne
+    % \pdfbookmark[0]{\eabstractname}{XAUATchapter.\theXAUAT@bookmark}
     \pagestyle{XAUAT@headings}
     \fancyhf{}
     \fancyhead[CO]{\songti\xiaosi[1.0]\eabstractname}
     \fancyhead[CE]{\songti\xiaosi[1.0]\XAUAT@cschoolname\XAUAT@capply}
-    \vspace*{20.8pt}
+    \fancyfoot[RO,LE]{\songti\wuhao[1.0]\thepage}
+    % \vspace*{20.8pt}
     {\noindent\centering
     \parbox[c]{1\linewidth}{\sanhao[1.3]\bfseries\centering\XAUAT@etitle\ifthenelse{\equal{\XAUAT@efunds}{}}{}{$^{\ast}$}}\par
-    \vspace{20.8pt}
-    \renewcommand{\tabcolsep}{0pt}
-    \begin{tabular}{rll}
-        \XAUAT@emajorname       &:&  {\hspace{.5em}}\XAUAT@emajor \\
-        \XAUAT@estudenttitle    &:&   {\hspace{.5em}}\XAUAT@eauthor \\
-        \XAUAT@esupervisorname  &:&   {\hspace{.5em}}\XAUAT@esupervisor
-    \end{tabular}
-    \vspace{15.6pt} \par
+    \vspace{9pt}
+    {
+    \centering
+    \begin{tblr}{colspec={Q[r]Q[l]Q[l]},rows={font=\xiaosi},colsep=0pt,rowsep=4pt}
+        {\bf \XAUAT@edegreetype@title}       &:&  {\hspace{.5em}}\XAUAT@edegreetype \\
+        {\bf\XAUAT@emajorname}       &:&  {\hspace{.5em}}\XAUAT@emajor \\
+    \end{tblr}
+    }
+    \vspace{16pt} \par
     \sanhao[1.0]\bfseries\eabstractname
-    \vspace{7.8pt}
+    \vspace{8pt}
     \par
     }
     \XAUAT@eabstract
-    \par
+    \par\vspace{8pt}
     \setbox0=\hbox{{\bfseries Keywords:\enskip}}
     \noindent\hangindent\wd0\hangafter1
     \box0\XAUAT@ekeywords
     \par
+    \vskip 9bp 
+    \hbox{{\bfseries\XAUAT@ethesistype@title}{\XAUAT@ethesistype}}
     \vskip 20bp 
     \ifthenelse{\equal{\XAUAT@efunds}{}}{}
     {
@@ -872,7 +934,11 @@
     \begin{titlepage}
         \XAUAT@first@titlepage
         \cleardoublepage
+        \XAUAT@second@titlepage
+        \cleardoublepage
         \engcover
+        \cleardoublepage
+        \committee
         \cleardoublepage
         \declaration
     \end{titlepage}
@@ -882,8 +948,7 @@
 
 % table of content
 \renewcommand\tableofcontents{
-    \XAUAT@chapter*[]{\contentsname}[\contentsname] % \XAUAT@cschoolname\XAUAT@capply~
-    \setcounter{page}{1}
+    \XAUAT@chapter*[]{\contentsname}[\contentsname] % 
     \normalsize\@starttoc{toc}\clearpage
 }
 
@@ -1000,13 +1065,6 @@
 }{\clearpage}
 \newcommand{\resumeitem}[1]{\vspace{2.5em}{\bfseries\wuhao\heiti\leftline{#1}}\par}
 
-% 书脊
-\NewDocumentCommand{\shuji}{O{\XAUAT@ctitlefirst \XAUAT@ctitlesecond} O{\XAUAT@cauthor}}{%
-    \newpage\thispagestyle{empty}%
-    \fangsong\ifxetex\addCJKfontfeatures*{RawFeature={vertical:}}\fi  %\kaishu
-    \xiaosan\ziju{0.4}%
-    \noindent\centering\rotatebox[origin=lt]{-90}{\makebox[\textheight]{#1\hfill#2}}
-}
 
 \AtEndOfClass{\input{XAUATthesis.cfg}}
 \endinput

@@ -37,11 +37,13 @@ v1.0.0
 
 ## 更新说明
 
+### v1.1.0
+* 2024-04-16 按照《西安建筑科技大学研究生学位论文撰写标准（西建大研〔2023〕7号）》要求更新了封面和格式
 ### v1.0.1
 * 2022-09-16 use *tabularray* package
 * 2022-09-16 Remove *layout* package
 ### v1.0.0
-* 2021-05-26 修复threeparttable字号问题;
+* 2021-05-26 修复threeparttable字号问题
 * 2021-05-26 解决警告"Font FandolSong-Regular does not contain requested(fontspec) Script"
 * 2021-07-20 引入cleveref包
 * 2021-11-16 删除pifootnote
