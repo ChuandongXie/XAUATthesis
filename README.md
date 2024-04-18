@@ -4,26 +4,22 @@ A LaTeX thesis template for Xi'an University of Architecture and Technology
 
 西安建筑科技大学研究生学位论文模板 XAUATthesis
 
-v1.1.0
+v1.1.1
 
 ## 主要参考资料
-* [西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)（或见/attachments）
+* 《西安建筑科技大学研究生学位论文撰写标准（西建大研〔2023〕7号）》
+* [《关于启用新版博士、硕士学位论文封面的通知》](https://gs.xauat.edu.cn/info/1023/3446.htm)
 * [LATEX2E for class and package writers](https://www.latex-project.org)
 * [LATEX2E for authors](https://www.latex-project.org)
 * The LaTeX Companion, Second Edition. by Frank Mittelbach, Michel Goossens, et al.
 * [marquistj13/TongjiThesis 2020/07/18](https://github.com/marquistj13/TongjiThesis)
 
-## 重要说明
-* `XAUATthesis v1.1.0 `主要根据研究生手册论文要求编写，可能还有些内容需要完善。目前本人正在进行论文写作，cls文件一直处于完善状态，最新的cls文件会更新到patch-1。
-
 ## 版本说明
-* 本版本为XAUATthesis v1.1.0 `疏漏与错误`，有兴趣使用的同学发现问题请告知于我；或提出建议，笔者将不胜感激；
-* 本模板原则上按照[西安建筑科技大学2017级研究生手册](http://gs.xauat.edu.cn)中`《学位论文撰写标准》`一章进行编写，但是该章`缺乏维护`，许多详尽要求未给出，甚至存在过时要求，式样落后等；笔者在局部位置作了调整；
-* 封面`西安建筑科技大学`采用华文行楷字体；
-* XAUATthesis在TeXlive 2022、MikTeX 20.6.29发行版可正常编译。
+* 本版本为XAUATthesis v1.1.1 `疏漏与错误`，有兴趣使用的同学发现问题请告知于我；
+* 本模板原则上按照《西安建筑科技大学研究生学位论文撰写标准（西建大研〔2023〕7号）》、《关于启用新版博士、硕士学位论文封面的通知》编写，仅供参考。
 
 ## 使用说明
-* 本模板包含`XAUATthesis.cls`（模板文件），`XAUATthesis.cfg`（配置文件），`XAUATutils.sty`（引入宏包文件）及主文档`XAUATthesis.tex`;
+* 本模板包含`XAUATthesis.cls`（模板文件），`XAUATcover.cls`（模板文件），`XAUATthesis.cfg`（配置文件），`XAUATutils.sty`（引入宏包文件）及主文档`XAUATthesis.tex`和封面文档`XAUATcover.tex`；
 * 章.tex文件在/data中，图片在/figures中，参考文献在/ref中；
 * 采用`biber`后端编译参考文献；
 * XAUATthesis 提供的选项包括：
@@ -32,10 +28,13 @@ v1.1.0
   | degree     | master/doctor      | 必选，硕士/博士                                  |
   | secret     | none/one/two/three | 必选，公开/保密1年/保密2年/保密3年                |
   | bibtype    | numeric/authoryear | 可选，默认为数字型引用                            |
-  | electronic |                    | 可选，电子版（打印时删除）                        |
-* 关于选项中的保密选项，声明页的文本会`自动调整`。
+* 关于选项中的保密选项，声明页的文本会`自动调整`；
+* v1.1.1新增了`XAUATcover`，使用时编译`XAUATcover.tex`即可，数据将自动从`XAUATthesis.cfg`和`data/cover.tex`导入。
 
 ## 更新说明
+
+### v1.1.1
+* 2024-04-18 设计了XAUATcover
 
 ### v1.1.0
 * 2024-04-16 按照《西安建筑科技大学研究生学位论文撰写标准（西建大研〔2023〕7号）》要求更新了封面和格式

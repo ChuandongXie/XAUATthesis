@@ -58,7 +58,6 @@
     \expandafter\csname XAUAT@#1true\endcsname
 }
 
-\DeclareBoolOption{electronic}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 
 \PassOptionsToPackage{AutoFakeBold=2.17,AutoFakeSlant=true}{xeCJK}
@@ -547,10 +546,12 @@
 
 % 学位中英文
 \XAUAT@def@term{cdegree}
+\XAUAT@def@term{cdegreebrief}
 \XAUAT@def@term{edegree}
 
 % 学位类别中英文
 \XAUAT@def@term{cdegreetype}
+\XAUAT@def@term{cdegreetypebrief}
 \XAUAT@def@term{edegreetype}
 
 % 院系中英文名称
@@ -560,6 +561,7 @@
 % 专业中英文名称
 \XAUAT@def@term{cmajor}
 \XAUAT@def@term{emajor}
+\XAUAT@def@term{cmajortypetitle}
 
 % 论文成文日期
 \XAUAT@def@term{cdefencedate}
