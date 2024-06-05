@@ -1009,9 +1009,11 @@
 
 % 参考文献
 \let\inlinecite\parencite
+\setlength{\bibitemsep}{0ex}
 \setlength{\bibnamesep}{0ex}
 \setlength{\bibinitsep}{0ex}
-\newcommand\printXAUATbibliography{\printbibliography[heading=bibintoc]\clearpage\sloppy % 解决行溢出
+\setlength{\biblabelsep}{\labelsep}
+\newcommand\printXAUATbibliography{\begingroup\setstretch{1.0}\printbibliography[heading=bibintoc]\clearpage\sloppy\endgroup % 解决行溢出
 }
 
 
