@@ -6,6 +6,11 @@ A LaTeX thesis template for Xi'an University of Architecture and Technology
 
 v1.1.1
 
+## 在线编译平台
+* [Overleaf](https://www.overleaf.com/latex/templates/xi-an-jian-zhu-ke-ji-da-xue-latexyan-jiu-sheng-xue-wei-lun-wen-mo-ban/hmpdycycnmqd)
+* [TeXPage](https://www.texpage.com/template/e327e4b2-1bae-42da-961b-64213a7e8ebc)
+
+
 ## 主要参考资料
 * 《西安建筑科技大学研究生学位论文撰写标准（西建大研〔2023〕7号）》
 * [《关于启用新版博士、硕士学位论文封面的通知》](https://gs.xauat.edu.cn/info/1023/3446.htm)

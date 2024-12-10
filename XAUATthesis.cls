@@ -3,7 +3,7 @@
 % ------------------------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 \ProvidesClass{XAUATthesis}
-[2020/08/10 v1.0.0 Xi'an University of Architecture & Techenology Thesis Template]
+[2020/08/10 v1.1.1 Xi'an University of Architecture & Techenology Thesis Template]
 % ------------------------------------------------------------------------------
 % initial code
 % ------------------------------------------------------------------------------
